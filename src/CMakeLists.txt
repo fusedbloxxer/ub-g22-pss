@@ -10,8 +10,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Use the compile_commands.json in C++ extension
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Create project executable
 add_executable(pss main.cpp)
-target_compile_definitions(pss PRIVATE TEST=123)
 
+# Add compile-time constants
+target_compile_definitions(pss PRIVATE TEST=123)
+target_compile_options(pss PRIVATE -g)
+
+# Add library dependencies
 find_package(Boost CONFIG REQUIRED)
 target_link_libraries(pss PRIVATE Boost::boost)
