@@ -87,7 +87,8 @@
         "coroutine": "cpp",
         "expected": "cpp",
         "*.inc": "cpp",
-        "locale": "cpp"
+        "locale": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.sourceDirectory": "/mnt/storage/git/ub-g22-pss/src",
     "cmake.configureOnOpen": false
