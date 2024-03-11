@@ -4,4 +4,5 @@
 BIN_PATH='./bin'
 
 # Execute the program
-valgrind --tool=memcheck "$@" $BIN_PATH/pss
+# valgrind --tool=memcheck "$@" $BIN_PATH/pss
+$BIN_PATH/pss
