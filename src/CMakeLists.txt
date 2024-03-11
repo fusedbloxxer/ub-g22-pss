@@ -17,6 +17,6 @@ add_executable(pss main.cpp zone.cpp)
 target_compile_definitions(pss PRIVATE TEST=123)
 target_compile_options(pss PRIVATE -g)
 
-# Add library dependencies
-find_package(Boost CONFIG REQUIRED)
+# Add libraries
+find_package(Boost MODULE REQUIRED)
 target_link_libraries(pss PRIVATE Boost::boost)
