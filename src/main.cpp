@@ -1,3 +1,5 @@
+#include <map>
+#include <utility>
 #include <format>
 #include <vector>
 #include <fstream>
@@ -16,29 +18,23 @@
 
 int main()
 {
-    // Read the input data
     Zone<State> zone = Zone<State>::read_from("res/input.txt");
 
-    // Transform into a graph
-    Graph g;
+    auto&& [graph, c2v] = build_graph(zone);
 
-    for (int i = 0; i != zone.data.size(); ++i)
+    auto details_map = get(vertex_details, graph);
+
+    for (auto&& [itp, endp] = vertices(graph); itp != endp; ++itp)
     {
-        for (int j = 0; j != zone.data[i].size(); ++j)
+        VertexDetails parent_details = get(details_map, *itp);
+
+        std::cout << std::format("parent ({}, {}): ", parent_details.coords.first, parent_details.coords.second);
+
+        for (auto&& [itc, endc] = adjacent_vertices(*itp, graph); itc != endc; ++itc)
         {
-            if (zone.data[i][j] != State::Wall)
-            {
-                const VertexDetails x { State::Free, std::make_tuple(i, j) };
+            VertexDetails child_details = get(details_map, *itc);
 
-                Vertex v = boost::add_vertex(x, g);
-
-                auto details_map = boost::get(vertex_details, g);
-
-                auto y = details_map[v];
-
-                std::cout << y.s << " " << std::get<0>(y.coords) << " " << std::get<1>(y.coords) << " = ";
-            }
-
+            std::cout << std::format("({}, {}) ", child_details.coords.first, child_details.coords.second);
         }
 
         std::cout << std::endl;
