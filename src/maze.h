@@ -10,6 +10,7 @@
 #include <fstream>
 #include <format>
 #include <vector>
+#include <memory>
 #include <map>
 
 template <typename TCell>
@@ -57,34 +58,39 @@ public:
     template<typename Graph, typename PropMap>
     static auto to_graph(const Maze<TCell>& maze)
     {
+        // Extract Types
         using Vertex  = boost::graph_traits<Graph>::vertex_descriptor;
         using PropVal = boost::property_traits<PropMap>::value_type;
-        std::map<std::pair<int, int>, Vertex> c2v;
-        Graph graph;
 
+        // Allocate memory for graph & coord2vec
+        std::map<std::pair<int, int>, Vertex> coord2vertex;
+        auto graphPtr = std::make_unique<Graph>();
+        Graph& graph = *graphPtr;
+
+        // Fill in the graph based on the maze
         for (int i = 0; i != maze.cells.size(); ++i)
         {
             for (int j = 0; j != maze.cells[i].size(); ++j)
             {
-                if ((bool) maze.cells[i][j])
+                if (maze.cells[i][j])
                 {
                     // Insert new vertex
                     PropVal value = { { i, j } };
                     Vertex vertex = boost::add_vertex(value, graph);
-                    c2v[value.coords] = vertex;
+                    coord2vertex[value.coords] = vertex;
 
                     // Add link to the top neighbor
                     auto top_idx = std::make_pair(i - 1, j);
-                    auto top_itr = c2v.find(top_idx);
-                    if (top_itr != c2v.end())
+                    auto top_itr = coord2vertex.find(top_idx);
+                    if (top_itr != coord2vertex.end())
                     {
                         boost::add_edge(vertex, top_itr->second, graph);
                     }
 
                     // Add link to the left neighbor
                     auto left_idx = std::make_pair(i, j - 1);
-                    auto left_itr = c2v.find(left_idx);
-                    if (left_itr != c2v.end())
+                    auto left_itr = coord2vertex.find(left_idx);
+                    if (left_itr != coord2vertex.end())
                     {
                         boost::add_edge(vertex, left_itr->second, graph);
                     }
@@ -92,13 +98,7 @@ public:
             }
         }
 
-        struct GraphAndCoords
-        {
-            decltype(graph) g;
-            decltype(c2v) c;
-        };
-
-        return GraphAndCoords { graph, c2v };
+        return std::make_pair(std::move(graphPtr), std::move(coord2vertex));
     }
 
 public:

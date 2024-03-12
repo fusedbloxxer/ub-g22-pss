@@ -28,4 +28,6 @@ using DetailsMap = boost::property_map<Graph, vertex_details_t>::type;
 
 using Vertex = boost::graph_traits<Graph>::vertex_descriptor;
 
+using Edge = boost::graph_traits<Graph>::edge_descriptor;
+
 #endif
