@@ -1,5 +1,5 @@
-#ifndef __GRAPH_SEARCH__
-#define __GRAPH_SEARCH__
+#ifndef __SEARCH__
+#define __SEARCH__
 
 #include <stdexcept>
 #include <set>

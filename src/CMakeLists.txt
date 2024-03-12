@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create project executable
-add_executable(pss main.cpp graph.cpp maze.cpp cell.cpp graph_search.cpp)
+add_executable(pss main.cpp graph.cpp maze.cpp cell.cpp search.cpp)
 
 # Add compile-time constants
 target_compile_definitions(pss PRIVATE TEST=123)

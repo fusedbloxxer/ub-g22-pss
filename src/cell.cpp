@@ -1,51 +1,32 @@
+#include <stdexcept>
+#include <format>
+#include <string>
+
 #include "cell.h"
 
-template <>
-Cell::CellType Cell::convert_to(const char &value)
+Cell::operator CellType() const
 {
-    switch (value)
-    {
-    case 'X':
-        return CellType::Player;
-    case '0':
-        return CellType::Empty;
-    case 'Y':
-        return CellType::Door;
-    case '1':
-        return CellType::Wall;
-    default:
-        throw std::invalid_argument(std::format("Could not convert {} to CellType!", "value"));
-    }
+    return this->type;
 }
 
-template <>
-char Cell::convert_to(const CellType &value)
+Cell::operator bool() const
 {
-    switch (value)
-    {
-    case CellType::Player:
-        return 'X';
-    case CellType::Empty:
-        return '0';
-    case CellType::Wall:
-        return '1';
-    case CellType::Door:
-        return 'Y';
-    default:
-        throw std::invalid_argument(std::format("Could not convert CellType {} to char!", static_cast<int>(value)));
-    }
+    return this->type != CellType::Wall;
 }
 
 std::ostream &operator<<(std::ostream &os, Cell &cell)
 {
-    os << Cell::convert_to<char>(cell.type);
-    return os;
+    return os << cell.type;
 }
 
 std::istream &operator>>(std::istream &is, Cell &cell)
 {
-    char c;
-    is >> c;
-    cell.type = Cell::convert_to<Cell::CellType>(c);
-    return is;
+    char c; is >> c;
+
+    if (std::string("X01Y").find(c) == std::string::npos)
+    {
+        throw std::runtime_error(std::format("Invalid cell type: {}!", c));
+    }
+
+    return (cell.type = static_cast<Cell::CellType>(c)), is;
 }

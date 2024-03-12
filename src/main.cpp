@@ -1,13 +1,11 @@
-#include <format>
-#include "cell.h"
-#include "maze.h"
+#include "search.h"
 #include "graph.h"
-#include "graph_search.h"
+#include "maze.h"
 
 int main()
 {
     // Read maze fron input file
-    auto &&maze = Maze<Cell>::from_file("res/input.txt");
+    auto &&maze = Maze<Cell>::from_file("res/input_1.txt");
     std::cout << maze << std::endl;
 
     // Convert maze to graph structure
@@ -16,7 +14,7 @@ int main()
     Graph& graph = *graphPtr;
 
     // Initial State
-    auto initPos = std::make_pair(1, 1);
+    auto initPos = maze.initPos;
     auto initState = State(graph, c2v[initPos]);
 
     // Get some actions

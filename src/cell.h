@@ -3,34 +3,42 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <concepts>
 #include <format>
 
-class Cell
+template <typename T>
+concept IsCell = requires(T cell)
 {
-public:
-    enum class CellType
+    std::is_enum_v<typename T::CellType>;
+
+    {T::CellType::Player} -> std::convertible_to<typename T::CellType>;
+    {T::CellType::Empty} -> std::convertible_to<typename T::CellType>;
+    {T::CellType::Door} -> std::convertible_to<typename T::CellType>;
+    {T::CellType::Wall} -> std::convertible_to<typename T::CellType>;
+
+    {cell.type} -> std::convertible_to<typename T::CellType>;
+    {cell} -> std::convertible_to<typename T::CellType>;
+    {cell} -> std::convertible_to<bool>;
+};
+
+struct Cell
+{
+    enum CellType : char
     {
-        Player,
-        Empty,
-        Door,
-        Wall,
+        Player = 'X',
+        Empty = '0',
+        Door = 'Y',
+        Wall = '1',
     };
 
-    template <typename Out, typename In>
-    static Out convert_to(const In &value);
-
-public:
     Cell(CellType &&cellType)
         : type(cellType) {}
     Cell()
         : Cell(CellType::Empty) {}
 
-    inline operator bool() const
-    {
-        return this->type != CellType::Wall;
-    }
+    operator CellType() const;
+    operator bool() const;
 
-public:
     CellType type;
 };
 
