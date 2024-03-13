@@ -23,7 +23,7 @@ std::istream &operator>>(std::istream &is, Cell &cell)
 {
     char c; is >> c;
 
-    if (std::string("X01Y").find(c) == std::string::npos)
+    if (std::string("X01VY").find(c) == std::string::npos)
     {
         throw std::runtime_error(std::format("Invalid cell type: {}!", c));
     }

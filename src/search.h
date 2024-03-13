@@ -5,10 +5,12 @@
 #include <functional>
 #include <algorithm>
 #include <stdexcept>
+#include <concepts>
 #include <memory>
 #include <queue>
 #include <stack>
 
+#include "visitor.h"
 #include "graph.h"
 
 struct State
@@ -178,16 +180,18 @@ struct Problem
     }
 };
 
-std::shared_ptr<Node> breadthFirstSearch(Problem& problem)
+template <typename T> requires Visitor<T, Problem, Node>
+std::shared_ptr<Node> breadthFirstSearch(Problem& problem, T& vis)
 {
     auto node = std::make_shared<Node>(problem.initState);
 
     if (problem.isGoal(node->state))
     {
+        vis.visit(problem, *node);
         return node;
     }
 
-    auto&& frontier = std::stack<std::shared_ptr<Node>>();
+    auto&& frontier = std::queue<std::shared_ptr<Node>>();
     frontier.push(node);
 
     auto&& reached = std::set<State, StateComparer>(StateComparer(problem.graph));
@@ -195,14 +199,15 @@ std::shared_ptr<Node> breadthFirstSearch(Problem& problem)
 
     while(!frontier.empty())
     {
-        node = frontier.top();
-
+        node = frontier.front();
+        vis.visit(problem, *node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
+                vis.visit(problem, *child);
                 return child;
             }
 

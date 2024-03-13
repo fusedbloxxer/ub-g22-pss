@@ -144,8 +144,8 @@ public:
     }
 };
 
-template <typename TCell>
-std::ostream &operator<<(std::ostream &os, Maze<TCell> &maze)
+template <typename T>
+std::ostream &operator<<(std::ostream &os, Maze<T> &maze)
 {
     for (int i = 0; i != maze.cells.size(); ++i)
     {

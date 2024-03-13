@@ -11,15 +11,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create project executable
-add_executable(pss main.cpp graph.cpp maze.cpp cell.cpp search.cpp)
+add_executable(pss main.cpp graph.cpp maze.cpp cell.cpp search.cpp visitor.cpp)
 
 # Add compile-time constants
 target_compile_definitions(pss PRIVATE TEST=123)
 target_compile_options(pss PRIVATE -g)
 
-# Add libraries
+# Add Boost Graph Library
 find_package(Boost MODULE REQUIRED)
 target_link_libraries(pss PRIVATE Boost::boost)
+
+# Add SFML Library
+find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+target_link_libraries(pss PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
 
 # Copy res files to output for debugging
 file(COPY "${CMAKE_SOURCE_DIR}/../res/input_0.txt" DESTINATION "${CMAKE_BINARY_DIR}/res")

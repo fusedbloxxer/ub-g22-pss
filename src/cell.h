@@ -11,6 +11,7 @@ concept IsCell = requires(T cell)
 {
     std::is_enum_v<typename T::CellType>;
 
+    {T::CellType::Visited} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Player} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Empty} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Door} -> std::convertible_to<typename T::CellType>;
@@ -25,6 +26,7 @@ struct Cell
 {
     enum CellType : char
     {
+        Visited = 'V',
         Player = 'X',
         Empty = '0',
         Door = 'Y',
