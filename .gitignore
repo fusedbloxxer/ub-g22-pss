@@ -4,6 +4,8 @@
 ### vcpkg ###
 # Dependencies
 vcpkg_installed/
+build/
+bin/
 
 ### C++ ###
 # Output

@@ -116,8 +116,8 @@ public:
             {
                 if (maze.cells[i][j])
                 {
-                    // Insert new vertex
-                    PropVal value = {{i, j}};
+                    // Insert new vertex along with information regarding it
+                    PropVal value = { { i, j }, maze.cells[i][j].type };
                     Vertex vertex = boost::add_vertex(value, graph);
                     coord2vertex[value.coords] = vertex;
 

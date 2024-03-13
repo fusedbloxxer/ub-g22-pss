@@ -5,11 +5,16 @@
 #include <boost/graph/graph_traits.hpp>
 #include <utility>
 
+#include "cell.h"
+
 // --- Implementation Details ---
 struct VertexDetails
 {
-    // Where is it located in the zone
+    // Where is it located in the maze
     std::pair<int, int> coords;
+
+    // What kind of cell it represents
+    Cell::CellType type;
 };
 
 // --- Property Mappings ---

@@ -1,3 +1,5 @@
+#include <format>
+
 #include "search.h"
 #include "graph.h"
 #include "maze.h"
@@ -5,30 +7,43 @@
 int main()
 {
     // Read maze fron input file
-    auto &&maze = Maze<Cell>::from_file("res/input_1.txt");
-    std::cout << maze << std::endl;
+    auto &&maze = Maze<Cell>::from_file("res/input_2.txt");
+    std::cout << "Maze:" << std::endl << maze;
 
     // Convert maze to graph structure
-    auto&& [graphPtr, c2v] = Maze<Cell>::to_graph<Graph, DetailsMap>(maze);
-    auto&& details_map = boost::get(vertex_details, *graphPtr);
-    Graph& graph = *graphPtr;
+    auto &&[graphPtr, c2v] = Maze<Cell>::to_graph<Graph, DetailsMap>(maze);
+    auto &&detailsMap = boost::get(vertex_details, *graphPtr);
+    Graph &graph = *graphPtr; //
 
     // Initial State
-    auto initPos = maze.initPos;
-    auto initState = State(graph, c2v[initPos]);
+    auto initState = State(c2v[maze.initPos]);
+    auto problem = Problem(graph, initState);
 
-    // Get some actions
-    auto actions = ACTIONS(initState);
+    // BFS
+    auto node = breadthFirstSearch(problem);
 
-    for (auto it_a = actions.begin(); it_a != actions.end(); ++it_a)
+    // Check for no solutions
+    if (!node)
     {
-        const auto& nextState = RESULT(initState, *it_a);
-
-        const auto& coords = boost::get(details_map, nextState.vertex).coords;
-
-        std::cout << coords.first << " " << coords.second << ", ";
+        std::cout << "No solution was found!" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    // Stop
+    std::cout << "A solution was found:" << std::endl;
+
+    node->rchain([&](const Node& elem)
+    {
+        auto details = boost::get(detailsMap, elem.state.vertex);
+
+        std::cout << std::format("({}, {})", details.coords.first, details.coords.second);
+
+        if (details.type != Cell::CellType::Door)
+        {
+            std:: cout << "->";
+        }
+    });
+
+    std::cout << std::endl;
+
     return EXIT_SUCCESS;
 }
