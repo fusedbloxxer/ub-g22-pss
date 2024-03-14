@@ -22,10 +22,10 @@ class ExplorationVisitor : public Visitor
     friend std::ostream& operator<<(std::ostream& os, const ExplorationVisitor<U>& vis);
 
 public:
-    ExplorationVisitor(const std::vector<std::vector<T>>& cells)
-        : _cells(cells) {}
-    ExplorationVisitor(const Maze<T>& maze)
-        : ExplorationVisitor(maze.cells) {}
+    ExplorationVisitor(const std::vector<std::vector<T>>& cells, std::ostream& os)
+        : _cells(cells), os(os) {}
+    ExplorationVisitor(const Maze<T>& maze, std::ostream& os)
+        : ExplorationVisitor(maze.cells, os) {}
 
     void visit(const Problem& problem, const Node& node)
     {
@@ -37,13 +37,14 @@ public:
 
         this->_cells[coords.first][coords.second] = T::CellType::Visited;
 
-        std::cout << *this << std::endl;
+        os << *this << std::endl;
 
         ++_steps;
     }
 
 private:
     std::vector<std::vector<T>> _cells;
+    std::ostream& os;
     int _steps = 0;
 };
 

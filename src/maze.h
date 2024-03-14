@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <stdexcept>
 #include <concepts>
+#include <iostream>
 #include <fstream>
 #include <format>
 #include <vector>
@@ -40,7 +41,14 @@ public:
         return this->_cells[index];
     }
 
-    static Maze<T> from_file(std::filesystem::path &&filepath)
+    static Maze<T> from_input(std::istream& is)
+    {
+        std::filesystem::path filepath;
+        is >> filepath;
+        return Maze<T>::from_file(filepath);
+    }
+
+    static Maze<T> from_file(std::filesystem::path filepath)
     {
         std::ifstream fs(filepath, std::ios::in);
 
