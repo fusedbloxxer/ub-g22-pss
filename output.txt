@@ -1,0 +1,418 @@
+Maze:
+X 0 0 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 0
+V 0 0 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 1
+V V 0 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 2
+V V 0 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 3
+V V 0 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 4
+V V 0 0 0 0 0 
+V V 1 0 0 0 0 
+0 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 5
+V V 0 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 6
+V V 0 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 7
+V V V 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 8
+V V V 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 9
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 10
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 11
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 0 0 0 0 
+0 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 12
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 13
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 14
+V V V V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 15
+V V V V V 0 0 
+V V 1 0 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 16
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 17
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V 0 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 18
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 19
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+0 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 20
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 21
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V 0 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 22
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 23
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 24
+V V V V V 0 0 
+V V 1 V 0 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 25
+V V V V V 0 0 
+V V 1 V V 0 0 
+V V 1 0 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 26
+V V V V V 0 0 
+V V 1 V V 0 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 27
+V V V V V 0 0 
+V V 1 V V 0 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 28
+V V V V V V 0 
+V V 1 V V 0 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 29
+V V V V V V 0 
+V V 1 V V 0 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 30
+V V V V V V V 
+V V 1 V V 0 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 31
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 32
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V 0 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 33
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 34
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 35
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 36
+V V V V V V V 
+V V 1 V V V 0 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 37
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 38
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V 0 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 39
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 40
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 41
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V 0 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 42
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 43
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 44
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 0 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 45
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 46
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 0 0 
+1 1 1 0 0 0 Y 
+
+Step: 47
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 0 V 
+1 1 1 0 0 0 Y 
+
+Step: 48
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 0 V 
+1 1 1 0 0 0 Y 
+
+Step: 49
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 V V 
+1 1 1 0 0 0 Y 
+
+Step: 50
+V V V V V V V 
+V V 1 V V V V 
+V V 1 V V V V 
+V V 1 1 1 1 V 
+V V 1 0 0 V V 
+1 1 1 0 0 0 V 
+
+A solution was found:
+(0, 0)->(0, 1)->(0, 2)->(0, 3)->(0, 4)->(0, 5)->(1, 5)->(2, 5)->(2, 6)->(3, 6)->(4, 6)->(5, 6)
