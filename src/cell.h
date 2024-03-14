@@ -38,13 +38,34 @@ struct Cell
     Cell()
         : Cell(CellType::Empty) {}
 
-    operator CellType() const;
-    operator bool() const;
+    inline operator CellType() const
+    {
+        return this->type;
+    }
+
+    inline operator bool() const
+    {
+        return this->type != CellType::Wall;
+    }
 
     CellType type;
 };
 
-std::ostream &operator<<(std::ostream &os, Cell &cell);
-std::istream &operator>>(std::istream &is, Cell &cell);
+inline std::ostream &operator<<(std::ostream &os, Cell &cell)
+{
+    return os << cell.type;
+}
+
+inline std::istream &operator>>(std::istream &is, Cell &cell)
+{
+    char c; is >> c;
+
+    if (std::string("X01VY").find(c) == std::string::npos)
+    {
+        throw std::runtime_error(std::format("Invalid cell type: {}!", c));
+    }
+
+    return (cell.type = static_cast<Cell::CellType>(c)), is;
+}
 
 #endif

@@ -27,7 +27,7 @@ namespace boost {
 // --- Useful Types ---
 using VertexDetailsProperty = boost::property<vertex_details_t, VertexDetails>;
 
-using Graph = boost::adjacency_list<boost::vecS, boost::setS, boost::undirectedS, VertexDetailsProperty, boost::no_property>;
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, VertexDetailsProperty, boost::no_property>;
 
 using DetailsMap = boost::property_map<Graph, vertex_details_t>::type;
 

@@ -1,5 +1,6 @@
 #include <format>
 
+#include "cell.h"
 #include "visitor.h"
 #include "search.h"
 #include "graph.h"
@@ -8,21 +9,25 @@
 int main()
 {
     // Read maze fron input file
-    auto &&maze = Maze<Cell>::from_file("res/input_2.txt");
+    auto &&maze = Maze<Cell>::from_file("res/input_1.txt");
     std::cout << "Maze:" << std::endl << maze << std::endl;
 
     // Convert maze to graph structure
     auto &&[graphPtr, c2v] = Maze<Cell>::to_graph<Graph, DetailsMap>(maze);
     auto &&detailsMap = boost::get(vertex_details, *graphPtr);
-    Graph &graph = *graphPtr; //
+    Graph &graph = *graphPtr;
 
     // Initial State
     auto initState = State(c2v[maze.initPos]);
     auto problem = Problem(graph, initState);
 
-    // BFS
+    // Choose algorithm
+    std::cout << "Choose search algorithm (bfs/dfs): " << std::flush;
+    auto algorithm = Search::createSearchAlgorithm(std::cin);
+
+    // Perform search and track visits
     auto vis = ExplorationVisitor(maze);
-    auto node = breadthFirstSearch(problem, vis);
+    auto node = algorithm->search(problem, vis);
 
     // Check for no solutions
     if (!node)
@@ -44,6 +49,8 @@ int main()
             std:: cout << "->";
         }
     });
+
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }

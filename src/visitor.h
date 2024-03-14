@@ -5,19 +5,19 @@
 #include <concepts>
 #include <vector>
 
+#include "problem.h"
 #include "graph.h"
 #include "cell.h"
 #include "maze.h"
 
-template <typename T, typename P, typename N>
-concept Visitor =
-    requires(T vis, std::ostream& os) { os << vis; } &&
-    requires(T vis, const P& problem, const N& node) { vis.visit(problem, node); };
+struct Visitor
+{
+    virtual void visit(const Problem& problem, const Node& node) = 0;
+};
 
 template <IsCell T>
-class ExplorationVisitor
+class ExplorationVisitor : public Visitor
 {
-public:
     template <IsCell U>
     friend std::ostream& operator<<(std::ostream& os, const ExplorationVisitor<U>& vis);
 
@@ -27,8 +27,7 @@ public:
     ExplorationVisitor(const Maze<T>& maze)
         : ExplorationVisitor(maze.cells) {}
 
-    template<typename P, typename N>
-    void visit(const P& problem, const N& node)
+    void visit(const Problem& problem, const Node& node)
     {
         DetailsMap detailsMap = boost::get(vertex_details, problem.graph);
 
@@ -39,15 +38,20 @@ public:
         this->_cells[coords.first][coords.second] = T::CellType::Visited;
 
         std::cout << *this << std::endl;
+
+        ++_steps;
     }
 
 private:
     std::vector<std::vector<T>> _cells;
+    int _steps = 0;
 };
 
 template <IsCell T>
 std::ostream& operator<<(std::ostream& os, const ExplorationVisitor<T>& vis)
 {
+    os << "Step: " << vis._steps << std::endl;
+
     for (auto it_r = vis._cells.cbegin(); it_r != vis._cells.cend(); ++it_r)
     {
         for (auto it_e = it_r->cbegin(); it_e != it_r->cend(); ++it_e)
