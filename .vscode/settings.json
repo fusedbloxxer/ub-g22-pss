@@ -96,5 +96,13 @@
     },
     "cmake.sourceDirectory": "/mnt/storage/git/ub-g22-pss/src",
     "cmake.configureOnOpen": false,
-    "makefile.makefilePath": "${workspaceFolder}/bin/Makefile"
+    "makefile.makefilePath": "${workspaceFolder}/bin/Makefile",
+    "C_Cpp.default.includePath": [
+        "${default}",
+        "${workspaceFolder}/maze/extensions/src",
+        "${workspaceFolder}/maze/.godot-cpp/include/",
+        "${workspaceFolder}/maze/.godot-cpp/gdextension/",
+        "${workspaceFolder}/maze/.godot-cpp/gen/include/"
+    ],
+    "C_Cpp.default.cppStandard": "c++20"
 }

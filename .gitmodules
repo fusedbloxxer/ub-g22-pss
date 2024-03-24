@@ -1,0 +1,4 @@
+[submodule "godot-cpp"]
+	path = maze/.godot-cpp
+	url = https://github.com/godotengine/godot-cpp.git
+	branch = master
