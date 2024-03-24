@@ -10,7 +10,7 @@
 #include <queue>
 #include <stack>
 
-#include "graph.h"
+#include "../maze/graph.h"
 
 struct State
 {
@@ -19,25 +19,25 @@ struct State
     State(Vertex vertex)
         : vertex(vertex) {}
 
-    inline bool operator==(const State& state) const
+    inline bool operator==(const State &state) const
     {
         return this == &state || this->vertex == state.vertex && state.vertex == this->vertex;
     }
 };
 
-template<>
+template <>
 class std::hash<State>
 {
-    Graph& graph;
+    Graph &graph;
 
 public:
-    hash(Graph& graph)
+    hash(Graph &graph)
         : graph(graph) {}
 
-    std::size_t operator()(const State& state) const
+    std::size_t operator()(const State &state) const
     {
-        auto&& detailsMap = boost::get(vertex_details, this->graph);
-        auto& [i, j] = boost::get(detailsMap, state.vertex).coords;
+        auto &&detailsMap = boost::get(vertex_details, this->graph);
+        auto &[i, j] = boost::get(detailsMap, state.vertex).coords;
         return std::hash<int>()(i) ^ std::hash<int>()(j);
     }
 };
@@ -61,11 +61,11 @@ struct Node
     Action action;
     const int pathCost;
 
-    Node(std::shared_ptr<Node> parent, const State& state, const Action& action)
+    Node(std::shared_ptr<Node> parent, const State &state, const Action &action)
         : state(state), parent(parent), action(action), pathCost(action.cost + (!parent ? 0 : parent->pathCost)) {}
-    Node(const State& state, const Action& action)
+    Node(const State &state, const Action &action)
         : Node(std::shared_ptr<Node>(nullptr), state, action) {}
-    Node(const State& state)
+    Node(const State &state)
         : Node(state, Action()) {}
 
     inline bool isRoot() const
@@ -73,7 +73,7 @@ struct Node
         return !this->parent;
     }
 
-    void chain(std::function<void(const Node&)> func) const
+    void chain(std::function<void(const Node &)> func) const
     {
         func(*this);
 
@@ -92,13 +92,13 @@ struct Node
         func(*node);
     }
 
-    void rchain(std::function<void(const Node&)> func) const
+    void rchain(std::function<void(const Node &)> func) const
     {
         return this->rchain(func, *this);
     }
 
 private:
-    void rchain(std::function<void(const Node&)> func, const Node& node) const
+    void rchain(std::function<void(const Node &)> func, const Node &node) const
     {
         if (!node.isRoot())
         {
@@ -111,35 +111,34 @@ private:
 
 struct Problem
 {
-    Graph& graph;
-    State& initState;
+    Graph &graph;
+    State &initState;
 
-    Problem(Graph& graph, State& state)
+    Problem(Graph &graph, State &state)
         : graph(graph), initState(state) {}
 
     std::vector<std::shared_ptr<Node>> expand(std::shared_ptr<Node> node) const
     {
-        auto&& actions  = this->actions(node->state);
+        auto &&actions = this->actions(node->state);
 
-        auto&& children = std::vector<std::shared_ptr<Node>>(actions.size());
+        auto &&children = std::vector<std::shared_ptr<Node>>(actions.size());
 
         std::transform(actions.cbegin(), actions.cend(), children.begin(),
-            [this, &node](const Action& action)
-            {
-                State state = this->transition(node->state, action);
+                       [this, &node](const Action &action)
+                       {
+                           State state = this->transition(node->state, action);
 
-                return std::make_shared<Node>(node, state, action);
-            }
-        );
+                           return std::make_shared<Node>(node, state, action);
+                       });
 
         return children;
     }
 
-    std::vector<Action> actions(const State& state) const
+    std::vector<Action> actions(const State &state) const
     {
         std::vector<Action> actions;
 
-        for (auto&& [it_s, it_e] = boost::out_edges(state.vertex, graph); it_s != it_e; ++it_s)
+        for (auto &&[it_s, it_e] = boost::out_edges(state.vertex, graph); it_s != it_e; ++it_s)
         {
             actions.push_back(Action(*it_s));
         }
@@ -147,7 +146,7 @@ struct Problem
         return actions;
     }
 
-    State transition(const State& state, const Action& action) const
+    State transition(const State &state, const Action &action) const
     {
         if (action.isNull)
         {
@@ -164,7 +163,7 @@ struct Problem
         return State(x);
     }
 
-    bool isGoal(const State& state) const
+    bool isGoal(const State &state) const
     {
         DetailsMap detailsMap = boost::get(vertex_details, graph);
 

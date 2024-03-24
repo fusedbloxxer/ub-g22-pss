@@ -1,26 +1,34 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <iostream>
 #include <fstream>
 #include <format>
 
-#include "cell.h"
-#include "visitor.h"
-#include "search.h"
-#include "graph.h"
-#include "maze.h"
+#include "anim/anim_explore.h"
+#include "searching/visitor.h"
+#include "searching/search.h"
+#include "render/manager.h"
+#include "base/component.h"
+#include "maze/graph.h"
+#include "maze/cell.h"
+#include "maze/maze.h"
 
 int main()
 {
-    // Where the output should be forwarded to
-    std::string output;
-    std::cout << "Where do you want the output(file/console): ";
-    std::cin >> output;
-    std::ofstream output_file("output.txt", std::ios::trunc);
-    std::ostream& os = output == "file" ? output_file : std::cout;
+    // Manage resources & rendering
+    auto manager = std::make_unique<Manager>();
+    manager->setTitle("Problem Solving by Searching");
 
-    // Read maze fron input file
-    std::cout << "Enter path to file: ";
-    auto &&maze = Maze<Cell>::from_input(std::cin);
-    os << "Maze:" << std::endl << maze << std::endl;
+    // Retrieve maze from input file
+    manager->setResourcePath("bin/resources");
+    std::ofstream os = std::ofstream(manager->getOutputPath());
+    std::string filename = "input_0.txt";
+    std::cout << "Enter file: ";
+    std::cin >> filename;
+    auto &&maze = Maze<Cell>::from_file(manager->getInputPath() / filename);
+
+    // Create a small window
+    manager->setResolution(1920, 1080);
 
     // Convert maze to graph structure
     auto &&[graphPtr, c2v] = Maze<Cell>::to_graph<Graph, DetailsMap>(maze);
@@ -32,8 +40,10 @@ int main()
     auto problem = Problem(graph, initState);
 
     // Choose algorithm
-    std::cout << "Choose search algorithm (bfs/dfs/ucs): " << std::flush;
-    auto algorithm = Search::createSearchAlgorithm(std::cin);
+    std::string alg = "ucs";
+    std::cout << "Choose alg(ucs/bfs/dfs/a*): ";
+    std::cin >> alg;
+    auto algorithm = Search::createSearchAlgorithm(alg);
 
     // Perform search and track visits
     auto vis = ExplorationVisitor(maze, os);
@@ -47,7 +57,6 @@ int main()
     }
 
     os << "A solution was found:" << std::endl;
-
     node->rchain([&](const Node& elem)
     {
         auto details = boost::get(detailsMap, elem.state.vertex);
@@ -61,6 +70,11 @@ int main()
     });
 
     os << std::endl;
+
+    // Render the animation
+    manager->init();
+    manager->addSceneObject(std::make_shared<GridAnimation>(vis.getHistory(), 10));
+    manager->runLoop();
 
     return EXIT_SUCCESS;
 }

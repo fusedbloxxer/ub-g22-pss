@@ -12,6 +12,7 @@ concept IsCell = requires(T cell)
     std::is_enum_v<typename T::CellType>;
 
     {T::CellType::Visited} -> std::convertible_to<typename T::CellType>;
+    {T::CellType::Explore} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Player} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Empty} -> std::convertible_to<typename T::CellType>;
     {T::CellType::Door} -> std::convertible_to<typename T::CellType>;
@@ -27,6 +28,7 @@ struct Cell
     enum CellType : char
     {
         Visited = 'V',
+        Explore = 'E',
         Player = 'X',
         Empty = '0',
         Door = 'Y',
@@ -60,7 +62,7 @@ inline std::istream &operator>>(std::istream &is, Cell &cell)
 {
     char c; is >> c;
 
-    if (std::string("X01VY").find(c) == std::string::npos)
+    if (std::string("X01VYE").find(c) == std::string::npos)
     {
         throw std::runtime_error(std::format("Invalid cell type: {}!", c));
     }

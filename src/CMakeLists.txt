@@ -10,8 +10,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Use the compile_commands.json in C++ extension
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Setup Project Paths
+set(RESOURCES_DIR ${PROJECT_SOURCE_DIR}/../resources)
+
+# List required source files
+set(
+    SRC_FILES
+    main.cpp
+
+    maze/cell.cpp
+    maze/maze.cpp
+    maze/graph.cpp
+
+    searching/search.cpp
+    searching/visitor.cpp
+    searching/problem.cpp
+    anim/anim_explore.cpp
+
+    base/component.cpp
+    render/manager.cpp
+    render/scene_object.cpp
+    render/event_manager.cpp
+    render/render_manager.cpp
+    render/resource_manager.cpp
+)
+
 # Create project executable
-add_executable(pss main.cpp)
+add_executable(pss ${SRC_FILES})
 
 # Add compile-time constants
 target_compile_definitions(pss PRIVATE TEST=123)
@@ -26,6 +51,4 @@ find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 target_link_libraries(pss PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
 
 # Copy res files to output for debugging
-file(COPY "${CMAKE_SOURCE_DIR}/../res/input_0.txt" DESTINATION "${CMAKE_BINARY_DIR}/res")
-file(COPY "${CMAKE_SOURCE_DIR}/../res/input_1.txt" DESTINATION "${CMAKE_BINARY_DIR}/res")
-file(COPY "${CMAKE_SOURCE_DIR}/../res/input_2.txt" DESTINATION "${CMAKE_BINARY_DIR}/res")
+file(COPY ${RESOURCES_DIR} DESTINATION ${CMAKE_BINARY_DIR})
