@@ -144,6 +144,22 @@ public:
                     {
                         boost::add_edge(vertex, left_itr->second, graph);
                     }
+
+                    // Add link to the top-left neightbor
+                    auto top_left_idx = std::make_pair(i - 1, j - 1);
+                    auto top_left_itr = coord2vertex.find(top_left_idx);
+                    if (top_left_itr != coord2vertex.end())
+                    {
+                        boost::add_edge(vertex, top_left_itr->second, graph);
+                    }
+
+                    // Add link to the top-right neightbor
+                    auto top_right_idx = std::make_pair(i - 1, j + 1);
+                    auto top_right_itr = coord2vertex.find(top_right_idx);
+                    if (top_right_itr != coord2vertex.end())
+                    {
+                        boost::add_edge(vertex, top_right_itr->second, graph);
+                    }
                 }
             }
         }

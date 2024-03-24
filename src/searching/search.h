@@ -17,6 +17,23 @@
 #include "visitor.h"
 #include "problem.h"
 
+struct Heuristic
+{
+    float operator()(const Problem &problem, const State &state) const;
+
+    virtual float heuristic(decltype(VertexDetails::coords) coordsCurrent, decltype(VertexDetails::coords) coordsGoal) const = 0;
+};
+
+struct L1Heuristic final : Heuristic
+{
+    virtual float heuristic(decltype(VertexDetails::coords) coordsCurrent, decltype(VertexDetails::coords) coordsGoal) const override;
+};
+
+struct L2Heuristic final : Heuristic
+{
+    virtual float heuristic(decltype(VertexDetails::coords) coordsCurrent, decltype(VertexDetails::coords) coordsGoal) const override;
+};
+
 struct Search
 {
     virtual std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const = 0;
@@ -37,6 +54,26 @@ struct DepthFirstSearch : Search
 struct UniformCostSearch : Search
 {
     std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const override;
+};
+
+struct AStarSearch : Search
+{
+    AStarSearch(std::shared_ptr<Heuristic> heuristic) : heuristic(heuristic) {}
+
+    std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const override;
+
+private:
+    std::shared_ptr<Heuristic> heuristic;
+};
+
+struct GreedySearch : Search
+{
+    GreedySearch(std::shared_ptr<Heuristic> heuristic) : heuristic(heuristic) {}
+
+    std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const override;
+
+private:
+    std::shared_ptr<Heuristic> heuristic;
 };
 
 #endif

@@ -37,11 +37,12 @@ int main()
 
     // Initial State
     auto initState = State(c2v[maze.initPos]);
-    auto problem = Problem(graph, initState);
+    auto stopState = State(c2v[maze.stopPos]);
+    auto problem = Problem(graph, initState, stopState);
 
     // Choose algorithm
     std::string alg = "ucs";
-    std::cout << "Choose alg(ucs/bfs/dfs/a*): ";
+    std::cout << "Choose alg(ucs/bfs/dfs/a*l1/a*l2/gl1/gl2): ";
     std::cin >> alg;
     auto algorithm = Search::createSearchAlgorithm(alg);
 
@@ -73,7 +74,7 @@ int main()
 
     // Render the animation
     manager->init();
-    manager->addSceneObject(std::make_shared<GridAnimation>(vis.getHistory(), 10));
+    manager->addSceneObject(std::make_shared<GridAnimation>(vis.getHistory(), 5));
     manager->runLoop();
 
     return EXIT_SUCCESS;

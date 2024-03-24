@@ -113,9 +113,10 @@ struct Problem
 {
     Graph &graph;
     State &initState;
+    State &stopState;
 
-    Problem(Graph &graph, State &state)
-        : graph(graph), initState(state) {}
+    Problem(Graph &graph, State &initState, State &stopState)
+        : graph(graph), initState(initState), stopState(stopState) {}
 
     std::vector<std::shared_ptr<Node>> expand(std::shared_ptr<Node> node) const
     {
