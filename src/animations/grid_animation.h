@@ -1,5 +1,5 @@
-#ifndef __ANIM_EXPLORE__
-#define __ANIM_EXPLORE__
+#ifndef __GRID_ANIMATION__
+#define __GRID_ANIMATION__
 
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
@@ -9,8 +9,8 @@
 #include <format>
 #include <vector>
 
-#include "../render/scene_object.h"
-#include "../searching/problem.h"
+#include "../components/scene_object.h"
+#include "../search/problem.h"
 #include "../maze/graph.h"
 #include "../maze/cell.h"
 

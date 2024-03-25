@@ -6,11 +6,11 @@
 #include <vector>
 #include <memory>
 
-#include "../base/component.h"
+#include "../components/scene_object.h"
+#include "../components/component.h"
 #include "resource_manager.h"
 #include "render_manager.h"
 #include "event_manager.h"
-#include "scene_object.h"
 
 class Manager : public Component
 {

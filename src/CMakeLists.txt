@@ -17,22 +17,19 @@ set(RESOURCES_DIR ${PROJECT_SOURCE_DIR}/../resources)
 set(
     SRC_FILES
     main.cpp
-
     maze/cell.cpp
     maze/maze.cpp
     maze/graph.cpp
-
-    searching/search.cpp
-    searching/visitor.cpp
-    searching/problem.cpp
-    anim/anim_explore.cpp
-
-    base/component.cpp
-    render/manager.cpp
-    render/scene_object.cpp
-    render/event_manager.cpp
-    render/render_manager.cpp
-    render/resource_manager.cpp
+    search/search.cpp
+    search/visitor.cpp
+    search/problem.cpp
+    manager/manager.cpp
+    manager/event_manager.cpp
+    manager/render_manager.cpp
+    manager/resource_manager.cpp
+    components/component.cpp
+    components/scene_object.cpp
+    animations/grid_animation.cpp
 )
 
 # Create project executable

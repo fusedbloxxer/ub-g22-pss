@@ -4,7 +4,7 @@
 #include <SFML/Window/Event.hpp>
 #include <functional>
 
-#include "../base/component.h"
+#include "../components/component.h"
 
 class EventManager : public Component
 {

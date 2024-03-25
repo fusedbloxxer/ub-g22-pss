@@ -5,7 +5,7 @@
 #include <SFML/Window.hpp>
 #include <functional>
 
-#include "../base/component.h"
+#include "../components/component.h"
 
 class RenderManager : public Component
 {

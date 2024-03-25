@@ -3,7 +3,7 @@
 
 #include <filesystem>
 
-#include "../base/component.h"
+#include "../components/scene_object.h"
 
 class ResourceManager : public Component
 {

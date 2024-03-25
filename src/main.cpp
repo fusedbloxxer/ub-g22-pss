@@ -4,11 +4,11 @@
 #include <fstream>
 #include <format>
 
-#include "anim/anim_explore.h"
-#include "searching/visitor.h"
-#include "searching/search.h"
-#include "render/manager.h"
-#include "base/component.h"
+#include "animations/grid_animation.h"
+#include "components/component.h"
+#include "manager/manager.h"
+#include "search/visitor.h"
+#include "search/search.h"
 #include "maze/graph.h"
 #include "maze/cell.h"
 #include "maze/maze.h"
@@ -43,7 +43,7 @@ int main()
     // Choose algorithm
     std::string alg = "gl2";
     std::cout << "Choose alg(ucs/bfs/dfs/a*l1/a*l2/gl1/gl2): ";
-    std::cin >> alg;
+    // std::cin >> alg;
     auto algorithm = Search::createSearchAlgorithm(alg);
 
     // Perform search and track visits

@@ -4,7 +4,7 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "../base/component.h"
+#include "component.h"
 
 struct Drawable : public sf::Drawable, public sf::Transformable
 {
