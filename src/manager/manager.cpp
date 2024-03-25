@@ -43,6 +43,7 @@ void Manager::setTitle(const std::string &title)
 void Manager::addSceneObject(std::shared_ptr<SceneObject> obj)
 {
     this->_sceneObjects.push_back(obj);
+    this->addComponent(obj);
 }
 
 void Manager::runLoop()

@@ -2,16 +2,15 @@
 #define __EVENT_MANAGER__
 
 #include <SFML/Window/Event.hpp>
+#include <unordered_set>
 #include <functional>
 
 #include "../components/component.h"
 
-class EventManager : public Component
+struct EventManager : public Component
 {
-public:
     EventManager(Component* parent);
 
-public:
     void process(const sf::Event& event);
 };
 

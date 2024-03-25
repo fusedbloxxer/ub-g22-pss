@@ -1,6 +1,7 @@
 #ifndef __GRID_ANIMATION__
 #define __GRID_ANIMATION__
 
+#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
 #include <stdexcept>
@@ -173,6 +174,24 @@ public:
 
     virtual void update(sf::Time delta) override
     {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::P))
+        {
+            if (this->isPausedFlag == false)
+            {
+                this->isPaused = !this->isPaused;
+                this->isPausedFlag = true;
+            }
+        }
+        else
+        {
+            this->isPausedFlag = false;
+        }
+
+        if (this->isPaused)
+        {
+            return;
+        }
+
         this->elapsedState += delta.asMicroseconds();
 
         _grid.update(sf::Vector2u(1920, 1080));
@@ -241,6 +260,8 @@ private:
     sf::Time endingDuration;
     sf::Time stepDuration;
 
+    bool isPausedFlag = false;
+    bool isPaused = false;
     float elapsedState;
     float remainingEnd;
 
