@@ -3,7 +3,7 @@
 RenderManager::RenderManager(Component *parent, const int width, const int height, const std::string &title)
     : Component(parent), window(sf::VideoMode(width, height), title, sf::Style::Default)
 {
-    this->window.setVerticalSyncEnabled(true);
+    this->window.setFramerateLimit(144);
     this->window.setVisible(false);
 }
 

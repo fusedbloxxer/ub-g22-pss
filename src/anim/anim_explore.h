@@ -10,6 +10,8 @@
 #include <vector>
 
 #include "../render/scene_object.h"
+#include "../searching/problem.h"
+#include "../maze/graph.h"
 #include "../maze/cell.h"
 
 struct GridCell final : public SceneObject
@@ -108,11 +110,11 @@ struct Grid final : public SceneObject
     void update(sf::Vector2u screenSize)
     {
         float cellsHeight = screenSize.y / this->cells.size();
-        float cellsWidth  = screenSize.x / this->cells[0].size();
+        float cellsWidth = screenSize.x / this->cells[0].size();
         float cellSize = std::min(cellsWidth, cellsHeight);
 
         float size = cellSize * 0.9;
-        float gap  = cellSize * 0.1;
+        float gap = cellSize * 0.1;
 
         for (int i = 0; i != cells.size(); ++i)
         {
@@ -132,7 +134,7 @@ struct Grid final : public SceneObject
         case Cell::CellType::Empty:
             return sf::Color::White;
         case Cell::CellType::Door:
-            return sf::Color::Red;
+            return sf::Color::Magenta;
         case Cell::CellType::Explore:
             return sf::Color::Yellow;
         case Cell::CellType::Player:
@@ -152,10 +154,11 @@ class GridAnimation final : public SceneObject
     using History = std::vector<std::vector<std::vector<Cell>>>;
 
 public:
-    GridAnimation(const History &history, const size_t seconds)
-        : _history(history), _grid(_history[0].size(), _history[0][0].size(), 50, 5)
+    GridAnimation(const History &history, const DetailsMap &details, std::shared_ptr<Node> solution)
+        : _history(history), _details(details), _solution(solution), _grid(_history[0].size(), _history[0][0].size(), 50, 5)
     {
-        this->sleepThreshold = 1'000 * seconds / _history.size();
+        this->setAnimationDuration(sf::seconds(10));
+        this->setEndingDuration(sf::seconds(10));
         this->resetState();
     }
 
@@ -168,37 +171,80 @@ public:
         target.draw(_grid, states);
     }
 
-    virtual void update(sf::Time elapsed) override
+    virtual void update(sf::Time delta) override
     {
-        this->sleepElapsed += elapsed.asMilliseconds();
+        this->elapsedState += delta.asMicroseconds();
 
         _grid.update(sf::Vector2u(1920, 1080));
 
-        if (this->sleepElapsed >= this->sleepThreshold)
+        if (this->elapsedState >= this->stepDuration.asMicroseconds())
         {
-            this->sleepElapsed = 0;
-            this->nextState();
-        }
-    }
+            this->elapsedState = 0;
 
-    void nextState()
-    {
-        this->index = (this->index + 1) % this->_history.size();
-        this->_grid.update(this->_history[this->index]);
+            if (this->remainingEnd <= 0)
+            {
+                this->index = (this->index + 1) % this->_history.size();
+                this->_grid.update(this->_history[this->index]);
+            }
+
+            if (this->index == this->_history.size() - 1)
+            {
+                if (this->remainingEnd == 0)
+                {
+                    this->remainingEnd = this->endingDuration.asMicroseconds();
+                }
+
+                int len = 0;
+
+                _solution->rchain([&](const Node &node)
+                {
+                    auto&& [i, j] = boost::get(_details, node.state.vertex).coords;
+                    this->_grid.cells[i][j].setColor(sf::Color::Red);
+                    ++len;
+                });
+
+                std::cout << "Steps: " << _history.size() << std::endl;
+                std::cout << "Solution Length: " << len << std::endl;
+            }
+        }
+
+        if (this->remainingEnd != 0)
+        {
+            this->remainingEnd = std::max(0.0f, this->remainingEnd - delta.asMicroseconds());
+
+            std::cout << "Pausing for: " << this->remainingEnd << "us" << std::endl;
+        }
     }
 
     void resetState()
     {
-        this->sleepElapsed = 0;
+        this->elapsedState = 0;
+        this->remainingEnd = 0;
         this->index = 0;
+    }
+
+    void setAnimationDuration(sf::Time time)
+    {
+        this->stepDuration = sf::microseconds(time.asMicroseconds() / this->_history.size());
+    }
+
+    void setEndingDuration(sf::Time time)
+    {
+        this->endingDuration = time;
     }
 
 private:
     const std::vector<std::vector<std::vector<Cell>>> &_history;
-    Grid _grid;
+    std::shared_ptr<Node> _solution;
+    const DetailsMap &_details;
 
-    float sleepThreshold;
-    float sleepElapsed;
+    sf::Time endingDuration;
+    sf::Time stepDuration;
+
+    float elapsedState;
+    float remainingEnd;
+
+    Grid _grid;
     int index;
 };
 

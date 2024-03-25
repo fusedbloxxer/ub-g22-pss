@@ -22,9 +22,9 @@ int main()
     // Retrieve maze from input file
     manager->setResourcePath("bin/resources");
     std::ofstream os = std::ofstream(manager->getOutputPath());
-    std::string filename = "input_0.txt";
+    std::string filename = "input_3.txt";
     std::cout << "Enter file: ";
-    std::cin >> filename;
+    // std::cin >> filename;
     auto &&maze = Maze<Cell>::from_file(manager->getInputPath() / filename);
 
     // Create a small window
@@ -41,7 +41,7 @@ int main()
     auto problem = Problem(graph, initState, stopState);
 
     // Choose algorithm
-    std::string alg = "ucs";
+    std::string alg = "gl2";
     std::cout << "Choose alg(ucs/bfs/dfs/a*l1/a*l2/gl1/gl2): ";
     std::cin >> alg;
     auto algorithm = Search::createSearchAlgorithm(alg);
@@ -57,24 +57,14 @@ int main()
         return EXIT_FAILURE;
     }
 
-    os << "A solution was found:" << std::endl;
-    node->rchain([&](const Node& elem)
-    {
-        auto details = boost::get(detailsMap, elem.state.vertex);
-
-        os << std::format("({}, {})", details.coords.first, details.coords.second);
-
-        if (details.type != Cell::CellType::Door)
-        {
-            os << "->";
-        }
-    });
-
-    os << std::endl;
+    // Prepare the animation
+    auto animation = std::make_shared<GridAnimation>(vis.getHistory(), detailsMap, node);
+    animation->setAnimationDuration(sf::seconds(8));
+    animation->setEndingDuration(sf::seconds(5));
 
     // Render the animation
     manager->init();
-    manager->addSceneObject(std::make_shared<GridAnimation>(vis.getHistory(), 5));
+    manager->addSceneObject(animation);
     manager->runLoop();
 
     return EXIT_SUCCESS;

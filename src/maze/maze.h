@@ -41,7 +41,7 @@ public:
         return this->_cells[index];
     }
 
-    static Maze<T> from_input(std::istream& is)
+    static Maze<T> from_input(std::istream &is)
     {
         std::filesystem::path filepath;
         is >> filepath;
@@ -125,7 +125,7 @@ public:
                 if (maze.cells[i][j])
                 {
                     // Insert new vertex along with information regarding it
-                    PropVal value = { { i, j }, maze.cells[i][j].type };
+                    PropVal value = {{i, j}, maze.cells[i][j].type};
                     Vertex vertex = boost::add_vertex(value, graph);
                     coord2vertex[value.coords] = vertex;
 
@@ -145,20 +145,26 @@ public:
                         boost::add_edge(vertex, left_itr->second, graph);
                     }
 
-                    // Add link to the top-left neightbor
-                    auto top_left_idx = std::make_pair(i - 1, j - 1);
-                    auto top_left_itr = coord2vertex.find(top_left_idx);
-                    if (top_left_itr != coord2vertex.end())
+                    // Add link to the top-left neightbor if it can be reached
+                    if (top_itr != coord2vertex.end() || left_itr != coord2vertex.end())
                     {
-                        boost::add_edge(vertex, top_left_itr->second, graph);
+                        auto top_left_idx = std::make_pair(i - 1, j - 1);
+                        auto top_left_itr = coord2vertex.find(top_left_idx);
+                        if (top_left_itr != coord2vertex.end())
+                        {
+                            boost::add_edge(vertex, top_left_itr->second, graph);
+                        }
                     }
 
-                    // Add link to the top-right neightbor
-                    auto top_right_idx = std::make_pair(i - 1, j + 1);
-                    auto top_right_itr = coord2vertex.find(top_right_idx);
-                    if (top_right_itr != coord2vertex.end())
+                    // Add link to the top-right neightbor if it can be reached
+                    if (top_itr != coord2vertex.end() || j + 1 < maze.cells[i].size() && maze.cells[i][j + 1])
                     {
-                        boost::add_edge(vertex, top_right_itr->second, graph);
+                        auto top_right_idx = std::make_pair(i - 1, j + 1);
+                        auto top_right_itr = coord2vertex.find(top_right_idx);
+                        if (top_right_itr != coord2vertex.end())
+                        {
+                            boost::add_edge(vertex, top_right_itr->second, graph);
+                        }
                     }
                 }
             }

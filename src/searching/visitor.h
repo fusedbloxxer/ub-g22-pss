@@ -12,7 +12,7 @@
 
 struct Visitor
 {
-    virtual void visit(const Problem &problem, const Node &node) = 0;
+    virtual void visit(const Problem &problem, const std::shared_ptr<Node> node) = 0;
 };
 
 template <IsCell T>
@@ -27,11 +27,13 @@ public:
     ExplorationVisitor(const Maze<T> &maze, std::ostream &os)
         : ExplorationVisitor(maze.cells, os) {}
 
-    void visit(const Problem &problem, const Node &node)
+    void visit(const Problem &problem, const std::shared_ptr<Node> node)
     {
+        solution = node;
+
         DetailsMap detailsMap = boost::get(vertex_details, problem.graph);
 
-        VertexDetails details = boost::get(detailsMap, node.state.vertex);
+        VertexDetails details = boost::get(detailsMap, node->state.vertex);
 
         const auto &coords = details.coords;
 
@@ -50,6 +52,9 @@ public:
     {
         return this->_history;
     }
+
+public:
+    std::shared_ptr<Node> solution;
 
 private:
     std::vector<std::vector<std::vector<T>>> _history;

@@ -57,7 +57,7 @@ std::shared_ptr<Node> BreadthFirstSearch::search(const Problem &problem, Visitor
 
     if (problem.isGoal(node->state))
     {
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         return node;
     }
 
@@ -70,14 +70,14 @@ std::shared_ptr<Node> BreadthFirstSearch::search(const Problem &problem, Visitor
     while (!frontier.empty())
     {
         node = frontier.front();
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 return child;
             }
 
@@ -98,7 +98,7 @@ std::shared_ptr<Node> DepthFirstSearch::search(const Problem &problem, Visitor &
 
     if (problem.isGoal(node->state))
     {
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         return node;
     }
 
@@ -111,14 +111,14 @@ std::shared_ptr<Node> DepthFirstSearch::search(const Problem &problem, Visitor &
     while (!frontier.empty())
     {
         node = frontier.top();
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 return child;
             }
 
@@ -139,7 +139,7 @@ std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor 
 
     if (problem.isGoal(node->state))
     {
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         return node;
     }
 
@@ -157,14 +157,14 @@ std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor 
     while (!frontier.empty())
     {
         node = frontier.top();
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 return child;
             }
 
@@ -173,7 +173,7 @@ std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor 
             if (seenChild == reached.end() || child->pathCost < seenChild->second)
             {
                 reached[child->state] = child->pathCost;
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 frontier.push(child);
             }
         }
@@ -188,7 +188,7 @@ std::shared_ptr<Node> AStarSearch::search(const Problem &problem, Visitor &vis) 
 
     if (problem.isGoal(node->state))
     {
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         return node;
     }
 
@@ -208,14 +208,14 @@ std::shared_ptr<Node> AStarSearch::search(const Problem &problem, Visitor &vis) 
     while (!frontier.empty())
     {
         node = frontier.top();
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 return child;
             }
 
@@ -224,7 +224,7 @@ std::shared_ptr<Node> AStarSearch::search(const Problem &problem, Visitor &vis) 
             if (seenChild == reached.end() || child->pathCost < seenChild->second)
             {
                 reached[child->state] = child->pathCost;
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 frontier.push(child);
             }
         }
@@ -239,7 +239,7 @@ std::shared_ptr<Node> GreedySearch::search(const Problem &problem, Visitor &vis)
 
     if (problem.isGoal(node->state))
     {
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         return node;
     }
 
@@ -259,14 +259,14 @@ std::shared_ptr<Node> GreedySearch::search(const Problem &problem, Visitor &vis)
     while (!frontier.empty())
     {
         node = frontier.top();
-        vis.visit(problem, *node);
+        vis.visit(problem, node);
         frontier.pop();
 
         for (auto child : problem.expand(node))
         {
             if (problem.isGoal(child->state))
             {
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 return child;
             }
 
@@ -275,7 +275,7 @@ std::shared_ptr<Node> GreedySearch::search(const Problem &problem, Visitor &vis)
             if (seenChild == reached.end() || child->pathCost < seenChild->second)
             {
                 reached[child->state] = child->pathCost;
-                vis.visit(problem, *child);
+                vis.visit(problem, child);
                 frontier.push(child);
             }
         }
