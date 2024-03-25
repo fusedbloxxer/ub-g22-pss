@@ -50,13 +50,19 @@ struct DepthFirstSearch : Search
 {
     std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const override;
 };
+struct BestFirstSearch : Search
+{
+    using NodeComparer = std::function<bool(std::shared_ptr<Node>, std::shared_ptr<Node>)>;
 
-struct UniformCostSearch : Search
+    std::shared_ptr<Node> search(const Problem &problem, Visitor &vis, const NodeComparer& comparer) const;
+};
+
+struct UniformCostSearch : BestFirstSearch
 {
     std::shared_ptr<Node> search(const Problem &problem, Visitor &vis) const override;
 };
 
-struct AStarSearch : Search
+struct AStarSearch : BestFirstSearch
 {
     AStarSearch(std::shared_ptr<Heuristic> heuristic) : heuristic(heuristic) {}
 
@@ -66,7 +72,7 @@ private:
     std::shared_ptr<Heuristic> heuristic;
 };
 
-struct GreedySearch : Search
+struct GreedySearch : BestFirstSearch
 {
     GreedySearch(std::shared_ptr<Heuristic> heuristic) : heuristic(heuristic) {}
 

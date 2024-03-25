@@ -8,7 +8,7 @@ RenderManager::RenderManager(Component *parent, const int width, const int heigh
 }
 
 RenderManager::RenderManager(Component *parent)
-    : RenderManager(parent, 1920, 1080, "Maze")
+    : RenderManager(parent, 1280, 1024, "Maze")
 {
 }
 

@@ -194,7 +194,7 @@ public:
 
         this->elapsedState += delta.asMicroseconds();
 
-        _grid.update(sf::Vector2u(1920, 1080));
+        _grid.update(sf::Vector2u(1280, 1024));
 
         if (this->elapsedState >= this->stepDuration.asMicroseconds())
         {

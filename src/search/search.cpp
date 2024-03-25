@@ -133,7 +133,7 @@ std::shared_ptr<Node> DepthFirstSearch::search(const Problem &problem, Visitor &
     return std::shared_ptr<Node>();
 }
 
-std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor &vis) const
+std::shared_ptr<Node> BestFirstSearch::search(const Problem &problem, Visitor &vis, const NodeComparer &comparer) const
 {
     auto node = std::make_shared<Node>(problem.initState);
 
@@ -143,12 +143,7 @@ std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor 
         return node;
     }
 
-    auto comparator = [](const std::shared_ptr<Node> &x, const std::shared_ptr<Node> &y)
-    {
-        return !(x->pathCost < y->pathCost);
-    };
-
-    auto frontier = std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, decltype(comparator)>(comparator);
+    auto frontier = std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, decltype(comparer)>(comparer);
     frontier.push(node);
 
     auto reached = std::unordered_map<State, std::remove_const<decltype(Node::pathCost)>::type>(0, std::hash<State>(problem.graph));
@@ -182,16 +177,18 @@ std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor 
     return std::shared_ptr<Node>();
 }
 
+std::shared_ptr<Node> UniformCostSearch::search(const Problem &problem, Visitor &vis) const
+{
+    auto comparator = [](const std::shared_ptr<Node> &x, const std::shared_ptr<Node> &y)
+    {
+        return !(x->pathCost < y->pathCost);
+    };
+
+    return BestFirstSearch::search(problem, vis, comparator);
+}
+
 std::shared_ptr<Node> AStarSearch::search(const Problem &problem, Visitor &vis) const
 {
-    auto node = std::make_shared<Node>(problem.initState);
-
-    if (problem.isGoal(node->state))
-    {
-        vis.visit(problem, node);
-        return node;
-    }
-
     auto comparator = [&](const std::shared_ptr<Node> &x, const std::shared_ptr<Node> &y)
     {
         const int xCost = x->pathCost + (*this->heuristic)(problem, x->state);
@@ -199,50 +196,11 @@ std::shared_ptr<Node> AStarSearch::search(const Problem &problem, Visitor &vis) 
         return xCost > yCost;
     };
 
-    auto frontier = std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, decltype(comparator)>(comparator);
-    frontier.push(node);
-
-    auto reached = std::unordered_map<State, std::remove_const<decltype(Node::pathCost)>::type>(0, std::hash<State>(problem.graph));
-    reached.insert({node->state, node->pathCost});
-
-    while (!frontier.empty())
-    {
-        node = frontier.top();
-        vis.visit(problem, node);
-        frontier.pop();
-
-        for (auto child : problem.expand(node))
-        {
-            if (problem.isGoal(child->state))
-            {
-                vis.visit(problem, child);
-                return child;
-            }
-
-            auto seenChild = reached.find(child->state);
-
-            if (seenChild == reached.end() || child->pathCost < seenChild->second)
-            {
-                reached[child->state] = child->pathCost;
-                vis.visit(problem, child);
-                frontier.push(child);
-            }
-        }
-    }
-
-    return std::shared_ptr<Node>();
+    return BestFirstSearch::search(problem, vis, comparator);
 }
 
 std::shared_ptr<Node> GreedySearch::search(const Problem &problem, Visitor &vis) const
 {
-    auto node = std::make_shared<Node>(problem.initState);
-
-    if (problem.isGoal(node->state))
-    {
-        vis.visit(problem, node);
-        return node;
-    }
-
     auto comparator = [&](const std::shared_ptr<Node> &x, const std::shared_ptr<Node> &y)
     {
         const int xCost = (*this->heuristic)(problem, x->state);
@@ -250,38 +208,7 @@ std::shared_ptr<Node> GreedySearch::search(const Problem &problem, Visitor &vis)
         return xCost > yCost;
     };
 
-    auto frontier = std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, decltype(comparator)>(comparator);
-    frontier.push(node);
-
-    auto reached = std::unordered_map<State, std::remove_const<decltype(Node::pathCost)>::type>(0, std::hash<State>(problem.graph));
-    reached.insert({node->state, node->pathCost});
-
-    while (!frontier.empty())
-    {
-        node = frontier.top();
-        vis.visit(problem, node);
-        frontier.pop();
-
-        for (auto child : problem.expand(node))
-        {
-            if (problem.isGoal(child->state))
-            {
-                vis.visit(problem, child);
-                return child;
-            }
-
-            auto seenChild = reached.find(child->state);
-
-            if (seenChild == reached.end() || child->pathCost < seenChild->second)
-            {
-                reached[child->state] = child->pathCost;
-                vis.visit(problem, child);
-                frontier.push(child);
-            }
-        }
-    }
-
-    return std::shared_ptr<Node>();
+    return BestFirstSearch::search(problem, vis, comparator);
 }
 
 float Heuristic::operator()(const Problem& problem, const State &state) const

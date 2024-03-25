@@ -24,11 +24,11 @@ int main()
     std::ofstream os = std::ofstream(manager->getOutputPath());
     std::string filename = "input_3.txt";
     std::cout << "Enter file: ";
-    // std::cin >> filename;
+    std::cin >> filename;
     auto &&maze = Maze<Cell>::from_file(manager->getInputPath() / filename);
 
     // Create a small window
-    manager->setResolution(1920, 1080);
+    manager->setResolution(1280, 1024);
 
     // Convert maze to graph structure
     auto &&[graphPtr, c2v] = Maze<Cell>::to_graph<Graph, DetailsMap>(maze);
@@ -43,7 +43,7 @@ int main()
     // Choose algorithm
     std::string alg = "gl2";
     std::cout << "Choose alg(ucs/bfs/dfs/a*l1/a*l2/gl1/gl2): ";
-    // std::cin >> alg;
+    std::cin >> alg;
     auto algorithm = Search::createSearchAlgorithm(alg);
 
     // Perform search and track visits
