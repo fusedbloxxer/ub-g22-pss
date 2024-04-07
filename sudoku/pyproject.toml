@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "sudoku"
+version = "1.0.0"
+description = "Sudoku solver based upon local search methods (hill-climbing)"
+authors = ["fusedbloxxer <voidwarden@yahoo.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ipykernel = "^6.29.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
