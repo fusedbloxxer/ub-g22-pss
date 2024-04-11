@@ -96,6 +96,7 @@ class RandomRestartSimmulatedAnnealing(SearchAlgorithm):
 
             if delta_E > 0:
                 current = next
+                visitor.visit(problem, current, event=VisitEvent.NEXT)
             else:
                 prob: float = np.exp(delta_E / T)
                 choice: float = np.random.binomial(n=1, p=prob)

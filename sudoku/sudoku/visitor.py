@@ -33,19 +33,23 @@ class ExploreVisitor(SearchVisitor):
         match event:
             case VisitEvent.INITIAL:
                 print('Sample random initial state:')
+                print('Distance: {}'.format(state.dist))
                 print(problem.str(state))
                 self.step = 0
             case VisitEvent.SOLUTION:
                 print('Found a solution at step {}:'.format(self.step))
                 print(problem.str(state))
             case VisitEvent.SAMPLE:
-                print('Sample a neighbor at step {}:'.format(self.step))
+                # print('Sample a neighbor at step {}:'.format(self.step))
+                # print('Distance: {}'.format(state.dist))
                 # print(problem.str(state))
                 self.step += 1
             case VisitEvent.NEXT:
-                print('Found better neighbor at step {}:'.format(self.step))
-                print('New distance: {}'.format(state.dist))
+                # print('Accept neighbor at step {}:'.format(self.step))
+                # print('Distance: {}'.format(state.dist))
                 # print(problem.str(state))
+                pass
             case VisitEvent.RESTART:
-                print('Restarting at step {}:'.format(self.step))
+                # print('Restarting at step {}:'.format(self.step))
                 # print(problem.str(state))
+                pass

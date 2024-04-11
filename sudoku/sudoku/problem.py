@@ -163,6 +163,7 @@ class Problem(object):
         # Recompute cached dist
         pos_A: t.Tuple[int, int] = block[idx_A]
         pos_B: t.Tuple[int, int] = block[idx_B]
+        # print(f'Generate State: {pos_A} <-> {pos_B}')
 
         # Remove previous values
         if pos_A[0] != pos_B[0]:
