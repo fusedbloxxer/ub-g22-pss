@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxoioxlfj0lkn"]
+
+[ext_resource type="Script" path="res://Scenes/Components/Cup/Cup.cs" id="1_5h2q2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_p6iap"]
+radius = 44.0114
+
+[node name="Cup" type="Node2D"]
+position = Vector2(0, 1)
+script = ExtResource("1_5h2q2")
+
+[node name="Area" type="Area2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Area"]
+shape = SubResource("CircleShape2D_p6iap")

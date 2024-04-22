@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://yqe6p3bvx6l4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_377r1"]
+radius = 43.0
+height = 234.0
+
+[node name="Mancala" type="Node2D"]
+
+[node name="Area" type="Area2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Shape" type="CollisionShape2D" parent="Area"]
+shape = SubResource("CapsuleShape2D_377r1")
+metadata/_edit_lock_ = true
