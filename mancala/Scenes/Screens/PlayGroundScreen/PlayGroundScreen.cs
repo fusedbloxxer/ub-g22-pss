@@ -3,13 +3,16 @@ using System;
 
 public partial class PlayGroundScreen : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
+	[Signal]
+	public delegate void GameOverEventHandler();
+
+	private GameBoard _gameBoard;
+	private GameHUD _gameHUD;
+
 	public override void _Ready()
 	{
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
+		// Retrieve local refs
+		_gameBoard = GetNode<GameBoard>(nameof(GameBoard));
+		_gameHUD = GetNode<GameHUD>(nameof(GameHUD));
 	}
 }

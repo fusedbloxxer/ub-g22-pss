@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://yqe6p3bvx6l4"]
 
-[ext_resource type="Script" path="res://Scenes/Components/Mancala/Mancala.cs" id="1_wyepi"]
+[ext_resource type="Script" path="res://Scenes/Screens/PlayGroundScreen/Components/GameBoard/Mancala/Mancala.cs" id="1_wyepi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_377r1"]
 radius = 43.0

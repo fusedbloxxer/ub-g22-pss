@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4mko3xmixlw1"]
+[gd_scene load_steps=3 format=3 uid="uid://b4mko3xmixlw1"]
 
+[ext_resource type="PackedScene" uid="uid://cq1wh0a70aphk" path="res://Scenes/Screens/ChooseMenuScreen/ChooseMenuScreen.tscn" id="2_1hucw"]
 [ext_resource type="PackedScene" uid="uid://cawh4g3i2cr8v" path="res://Scenes/Screens/PlayGroundScreen/PlayGroundScreen.tscn" id="3_xqx0o"]
 
 [node name="Main" type="Node"]
 
 [node name="PlayGroundScreen" parent="." instance=ExtResource("3_xqx0o")]
+
+[node name="ChooseMenuScreen" parent="." instance=ExtResource("2_1hucw")]

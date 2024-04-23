@@ -3,48 +3,78 @@ using System;
 
 public partial class SceneManager : Node
 {
-    [Signal]
-    public delegate void GameStartEventHandler(GameBoardState state);
+	[Signal]
+	public delegate void ShowPlayGroundSceneEventHandler(GameBoard board, GameSettings settings);
+	[Signal]
+	public delegate void ShowChooseMenuScreenEventHandler();
+	[Signal]
+	public delegate void ShowMenuScreenEventHandler();
 
-    private PlayGroundScreen _playGround;
-    private PlayerMenuScreen _playerMenu;
-    private StartMenuScreen _startMenu;
-    private Node _root;
-    
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        // Retrieve local refs
-        _root = GetNode<Node>("/root/Main");
-        //_startMenu = _root.GetNode<StartMenuScreen>("StartMenuScreen");
-        //_playerMenu = _root.GetNode<PlayerMenuScreen>("PlayerMenuScreen");
-        _playGround = _root.GetNode<PlayGroundScreen>("PlayGroundScreen");
-        EmitSignal(SignalName.GameStart, _playGround.GetNode<GameBoardState>("GameBoard/GameBoardState"));
-
-        //// Choose initial scene
-        //_root.RemoveChild(_playerMenu);
-        //_root.RemoveChild(_playGround);
-
-        //// Listen to local signals
-        //_startMenu.StartGame += OnStartMenuStartGame;
-        //_playerMenu.StartGame += OnPlayerMenuStartGame;
-    }
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	private PlayGroundScreen _playGround;
+	private ChooseMenuScreen _chooseMenu;
+	private StartMenuScreen _startMenu;
+	private GameManager _gameManager;
+	private Node _root;
+	
+	public override void _Ready()
 	{
+		// Retrieve app root
+		_root = GetNode<Node>("/root/Main");
+		_gameManager = GetNode<GameManager>($"/root/{nameof(GameManager)}");
+
+		// Load scenes from disk
+		_startMenu = ResourceLoader
+			.Load<PackedScene>($"res://Scenes/Screens/{nameof(StartMenuScreen)}/{nameof(StartMenuScreen)}.tscn")
+			.Instantiate<StartMenuScreen>();
+		_chooseMenu = ResourceLoader
+			.Load<PackedScene>($"res://Scenes/Screens/{nameof(ChooseMenuScreen)}/{nameof(ChooseMenuScreen)}.tscn")
+			.Instantiate<ChooseMenuScreen>();
+		_playGround = ResourceLoader
+			.Load<PackedScene>($"res://Scenes/Screens/{nameof(PlayGroundScreen)}/{nameof(PlayGroundScreen)}.tscn")
+			.Instantiate<PlayGroundScreen>();
+
+		// Load the start menu
+		LoadMainMenu();
 	}
 
-    private void OnStartMenuStartGame()
-    {
-        _root.RemoveChild(_startMenu);
-        _root.AddChild(_playerMenu);
-    }
+	public void LoadMainMenu()
+	{
+		LoadScene(_startMenu);
+		_startMenu.StartGame += OnStartMenuStartGame;
+		EmitSignal(SignalName.ShowMenuScreen);
+	}
 
-    private void OnPlayerMenuStartGame(PlayerType playerTypeA, PlayerType playerTypeB)
-    {
-        _root.RemoveChild(_playerMenu);
-        _root.AddChild(_playGround);
-        EmitSignal(SignalName.GameStart);
-    }
+	private void OnStartMenuStartGame()
+	{
+		_startMenu.StartGame -= OnStartMenuStartGame; 
+		LoadScene(_chooseMenu);
+		_chooseMenu.StartGame += OnChooseMenuStartGame;
+		EmitSignal(SignalName.ShowChooseMenuScreen);
+	}
+
+	private void OnChooseMenuStartGame(GameSettings settings)
+	{
+		_chooseMenu.StartGame -= OnChooseMenuStartGame;
+		LoadScene(_playGround);
+		_playGround.GameOver += OnPlayGroundGameOver;
+		EmitSignal(SignalName.ShowPlayGroundScene, _playGround.GetNode<GameBoard>(nameof(GameBoard)), settings);
+	}
+
+	private void OnPlayGroundGameOver()
+	{
+		_playGround.GameOver -= OnPlayGroundGameOver;
+		LoadMainMenu();
+	}
+
+	private void LoadScene(Node scene)
+	{
+		// Make room to load the initial scene
+		foreach (var child in _root.GetChildren())
+		{
+			_root.RemoveChild(child);
+		}
+
+		// Load the scene
+		_root.AddChild(scene);
+	}
 }

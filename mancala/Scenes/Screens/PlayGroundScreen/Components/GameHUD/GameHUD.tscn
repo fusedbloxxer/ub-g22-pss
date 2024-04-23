@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://d1jgm0mh5h3hs"]
 
-[ext_resource type="Script" path="res://Scenes/Components/HUD/HUD.cs" id="1_rjwg4"]
+[ext_resource type="Script" path="res://Scenes/Screens/PlayGroundScreen/Components/GameHUD/GameHUD.cs" id="1_rjwg4"]
 
-[node name="HUD" type="Node"]
+[node name="GameHUD" type="Node"]
 script = ExtResource("1_rjwg4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -42,11 +42,25 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -594.0
-offset_top = -369.0
-offset_right = -508.0
-offset_bottom = -338.0
+offset_left = -122.0
+offset_top = -102.0
+offset_right = -26.0
+offset_bottom = -71.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Next Turn"
+
+[node name="MainMenuButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -60.0
+offset_right = -26.0
+offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
 toggle_mode = true
-text = "Next Turn"
+text = "Main Menu"

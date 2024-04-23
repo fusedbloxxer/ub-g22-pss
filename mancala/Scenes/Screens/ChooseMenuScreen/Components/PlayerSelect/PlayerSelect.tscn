@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://c4uk3jp06j7hm"]
 
-[ext_resource type="Script" path="res://Scenes/Components/PlayerSelect/PlayerSelect.cs" id="1_w6wba"]
+[ext_resource type="Script" path="res://Scenes/Screens/ChooseMenuScreen/Components/PlayerSelect/PlayerSelect.cs" id="1_x1wv4"]
 
 [node name="PlayerSelect" type="Node2D"]
 position = Vector2(610, 333)
-script = ExtResource("1_w6wba")
+script = ExtResource("1_x1wv4")
 metadata/_edit_group_ = true
 
 [node name="Label" type="Label" parent="."]

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class MancalaBoardCell : GameBoardCell
+public partial class GameBoardMancala : GameBoardCell
 {
-    public MancalaBoardCell(Player playerOwner, uint index)
+    public GameBoardMancala(PlayerName playerOwner, uint index)
     : base(playerOwner, index)
     {
 

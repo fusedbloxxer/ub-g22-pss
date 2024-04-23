@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/Screens/StartMenuScreen/StartMenuScreen.cs" id="1_fern3"]
 [ext_resource type="Texture2D" uid="uid://dkmpifto1m1lt" path="res://Assets/mancala_background.jpg" id="2_knkn6"]
-[ext_resource type="PackedScene" uid="uid://bo1xjfnr22amm" path="res://Scenes/Components/StartButton/StartButton.tscn" id="3_n3t2a"]
+[ext_resource type="PackedScene" uid="uid://bo1xjfnr22amm" path="res://Scenes/Common/StartButton/StartButton.tscn" id="3_n3t2a"]
 
 [node name="StartMenu" type="Node2D"]
 script = ExtResource("1_fern3")

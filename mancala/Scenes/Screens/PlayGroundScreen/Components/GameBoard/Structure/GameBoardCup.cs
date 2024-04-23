@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class CupBoardCell : GameBoardCell
+public partial class GameBoardCup : GameBoardCell
 {
     public uint Opposite { get; }
 
-    public CupBoardCell(Player playerOwner, uint index, uint opposite)
+    public GameBoardCup(PlayerName playerOwner, uint index, uint opposite)
     : base(playerOwner, index)
     {
         Opposite = opposite;

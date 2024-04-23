@@ -4,12 +4,12 @@ using System;
 public partial class Mancala : Node2D
 {
 	[Export]
-	public Player PlayerOwner { get; set; }
+	public PlayerName PlayerOwner { get; set; }
 
 	[Export]
 	public uint Index { get; set; }
 
-	private GameState _gameState;
+	private GameManager _gameState;
 	private Label _label;
 
 	private uint _pebbles;
@@ -19,7 +19,7 @@ public partial class Mancala : Node2D
 	{
 		// Retrieve global refs
 		_label = GetNode<Label>("Label");
-		_gameState = GetNode<GameState>("/root/GameState");
+		_gameState = GetNode<GameManager>("/root/GameManager");
 		_gameState.GameBoardCellUpdate += OnGameStateGameBoardCellUpdate;
 	}
 

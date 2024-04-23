@@ -4,7 +4,7 @@ using System;
 public partial class Cup : Node2D
 {
 	[Export]
-	public Player OwnerPlayer { get; set; }
+	public PlayerName OwnerPlayer { get; set; }
 
 	[Export]
 	public uint Index { get; set; }
@@ -13,7 +13,7 @@ public partial class Cup : Node2D
 
 	private CollisionShape2D _shape;
 	private Sprite2D _hoverSprite;
-	private GameState _gameState;
+	private GameManager _gameManager;
 	private Area2D _cupArea;
 	private Label _label;
 
@@ -21,11 +21,10 @@ public partial class Cup : Node2D
 	private bool _isActive;
 	private uint _pebbles;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		// Retrieve global refs
-		_gameState = GetNode<GameState>("/root/GameState");
+		_gameManager = GetNode<GameManager>("/root/GameManager");
 		
 		// Retrieve local refs
 		_label = GetNode<Label>("Label");
@@ -33,21 +32,17 @@ public partial class Cup : Node2D
 		_hoverSprite = GetNode<Sprite2D>("HoverSprite");
 
 		// Listen to global signals
-		_gameState.GameBoardCellUpdate += OnGameStateGameBoardCellUpdate;
-		_gameState.PlayerTurnChanged += OnGameStatePlayerTurnChanged;
+		_gameManager.GameBoardCellUpdate += OnGameStateGameBoardCellUpdate;
+		_gameManager.PlayerTurnChanged += OnGameStatePlayerTurnChanged;
+		_gameManager.GameOver += OnGameManagerGameOver;
 
 		// Listen to local signals
 		_cupArea.MouseEntered += OnAreaMouseEntered;
 		_cupArea.MouseExited += OnAreaMouseExited;
 
 		// Set initial state
-		_isActive = _gameState.CurrentPlayer == OwnerPlayer;
+		_isActive = false;
 		Pebbles = 4;
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 
 	public override void _Input(InputEvent @event)
@@ -72,7 +67,12 @@ public partial class Cup : Node2D
 			return;
 		}
 
-		_gameState.SelectCupCell(Index);
+		_gameManager.SelectCup(Index);
+	}
+
+	private void OnGameManagerGameOver()
+	{
+		_isActive = false;
 	}
 
 	private void OnGameStateGameBoardCellUpdate(uint index, uint pebbles)
@@ -90,9 +90,9 @@ public partial class Cup : Node2D
 		}
 	}
 
-	private void OnGameStatePlayerTurnChanged(Player currentPlayer)
+	private void OnGameStatePlayerTurnChanged(Player player)
 	{
-		_isActive = OwnerPlayer == currentPlayer;
+		_isActive = OwnerPlayer == player.Name && player.Type == PlayerType.Human;
 
 		if (!_isActive)
 		{
