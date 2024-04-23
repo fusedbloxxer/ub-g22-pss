@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjpbie0sy6sbt"]
+
+[ext_resource type="Texture2D" uid="uid://us88txxclvfv" path="res://Assets/mancala_board.png" id="1_dqepg"]
+[ext_resource type="Script" path="res://Scenes/Components/GameBoard/GameBoardState.cs" id="1_xr1jh"]
+[ext_resource type="PackedScene" uid="uid://yqe6p3bvx6l4" path="res://Scenes/Components/Mancala/Mancala.tscn" id="2_jyo21"]
+[ext_resource type="PackedScene" uid="uid://cxoioxlfj0lkn" path="res://Scenes/Components/Cup/Cup.tscn" id="3_tw0nu"]
+
+[node name="GameBoard" type="Node2D"]
+position = Vector2(640, 370)
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="GameBoardState" type="Node" parent="."]
+script = ExtResource("1_xr1jh")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_dqepg")
+
+[node name="Mancalas" type="Node2D" parent="."]
+
+[node name="Mancala0" parent="Mancalas" instance=ExtResource("2_jyo21")]
+position = Vector2(391, 1)
+Index = 6
+
+[node name="Mancala1" parent="Mancalas" instance=ExtResource("2_jyo21")]
+position = Vector2(-386, -2)
+PlayerOwner = 1
+Index = 13
+
+[node name="Cups" type="Node2D" parent="."]
+
+[node name="Cup0" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-282, 72)
+
+[node name="Cup1" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-178, 71)
+Index = 1
+
+[node name="Cup2" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-75, 72)
+Index = 2
+
+[node name="Cup3" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(86, 71)
+Index = 3
+
+[node name="Cup4" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(185, 70)
+Index = 4
+
+[node name="Cup5" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(288, 71)
+Index = 5
+
+[node name="Cup6" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(289, -69)
+OwnerPlayer = 1
+Index = 7
+
+[node name="Cup7" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(186, -71)
+OwnerPlayer = 1
+Index = 8
+
+[node name="Cup8" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(84, -73)
+OwnerPlayer = 1
+Index = 9
+
+[node name="Cup9" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-75, -74)
+OwnerPlayer = 1
+Index = 10
+
+[node name="Cup10" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-178, -75)
+OwnerPlayer = 1
+Index = 11
+
+[node name="Cup11" parent="Cups" instance=ExtResource("3_tw0nu")]
+position = Vector2(-282, -75)
+OwnerPlayer = 1
+Index = 12

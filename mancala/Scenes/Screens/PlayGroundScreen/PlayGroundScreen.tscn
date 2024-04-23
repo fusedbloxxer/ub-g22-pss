@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://cawh4g3i2cr8v"]
+
+[ext_resource type="PackedScene" uid="uid://c3xh18ekgdtlo" path="res://Scenes/Components/Background/Background.tscn" id="1_n4t4s"]
+[ext_resource type="Script" path="res://Scenes/Screens/PlayGroundScreen/PlayGroundScreen.cs" id="1_w7qes"]
+[ext_resource type="PackedScene" uid="uid://bjpbie0sy6sbt" path="res://Scenes/Components/GameBoard/GameBoard.tscn" id="2_nrj7e"]
+[ext_resource type="PackedScene" uid="uid://d1jgm0mh5h3hs" path="res://Scenes/Components/HUD/HUD.tscn" id="3_a1460"]
+
+[node name="PlayGroundScreen" type="Node2D"]
+script = ExtResource("1_w7qes")
+metadata/_edit_lock_ = true
+
+[node name="Background" parent="." instance=ExtResource("1_n4t4s")]
+
+[node name="GameBoard" parent="." instance=ExtResource("2_nrj7e")]
+
+[node name="HUD" parent="." instance=ExtResource("3_a1460")]

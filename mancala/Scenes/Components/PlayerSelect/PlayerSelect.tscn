@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4uk3jp06j7hm"]
+
+[ext_resource type="Script" path="res://Scenes/Components/PlayerSelect/PlayerSelect.cs" id="1_w6wba"]
+
+[node name="PlayerSelect" type="Node2D"]
+position = Vector2(610, 333)
+script = ExtResource("1_w6wba")
+metadata/_edit_group_ = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -216.0
+offset_top = -30.0
+offset_right = -152.0
+offset_bottom = -7.0
+scale = Vector2(3, 3)
+text = "Player A"
+
+[node name="Options" type="OptionButton" parent="."]
+offset_left = 26.0
+offset_top = -33.0
+offset_right = 192.0
+offset_bottom = -2.0
+scale = Vector2(2.33105, 2.33105)
+item_count = 2
+selected = 0
+popup/item_0/text = "Human"
+popup/item_0/id = 0
+popup/item_1/text = "AI"
+popup/item_1/id = 1

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bo1xjfnr22amm"]
+
+[ext_resource type="Texture2D" uid="uid://dy2lde5nhghpo" path="res://Assets/mancala_button_neutral.png" id="1_bk2hd"]
+[ext_resource type="Texture2D" uid="uid://dsssvw0xwygim" path="res://Assets/mancala_button_pressed.png" id="2_0ys5a"]
+
+[node name="StartButton" type="TextureButton"]
+offset_left = 490.0
+offset_top = 400.0
+offset_right = 687.0
+offset_bottom = 456.0
+scale = Vector2(1.5517, 1.5517)
+texture_normal = ExtResource("1_bk2hd")
+texture_pressed = ExtResource("2_0ys5a")
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.3439
+offset_top = -22.1999
+offset_right = 23.6561
+offset_bottom = 0.800095
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.50252, 1.50252)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Start Game"
+horizontal_alignment = 1
+vertical_alignment = 1
