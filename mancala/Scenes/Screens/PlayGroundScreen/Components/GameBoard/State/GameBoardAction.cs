@@ -7,5 +7,7 @@ public class GameBoardAction
 
     public GameBoardCell LastChangedCell { get; init; }
 
+    public PlayerName NextPlayer { get; init; }
+
     public bool IsGameOver { get; init; }
 }

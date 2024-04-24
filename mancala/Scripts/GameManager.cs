@@ -5,14 +5,11 @@ using System.Linq;
 public partial class GameManager : Node
 {
 	[Signal]
-	public delegate void GameStartEventHandler();
-
-	[Signal]
 	public delegate void GameOverEventHandler();
-
 	[Signal]
-	public delegate void PlayerTurnChangedEventHandler(Player player);
-
+	public delegate void GameStartEventHandler();
+	[Signal]
+	public delegate void GameNextTurnEventHandler(Player player);
 	[Signal]
 	public delegate void GameBoardCellUpdateEventHandler(uint index, uint pebbles);
 
@@ -26,7 +23,7 @@ public partial class GameManager : Node
 	{
 		// Retrieve local refs
 		_root = GetNode<Node>("/root/Main");
-		_sceneManager = GetNode<SceneManager>("/root/SceneManager");
+		_sceneManager = GetNode<SceneManager>($"/root/{nameof(SceneManager)}");
 
 		// Listen to global signals
 		_sceneManager.ShowPlayGroundScene += OnSceneManagerShowPlayGroundScene;
@@ -44,7 +41,28 @@ public partial class GameManager : Node
 		StartGame();
 	}
 
-	public void SelectCup(uint index)
+	public void StartGame()
+	{
+		// Renew the game state
+		_gameBoard.State.Reset();
+
+		// Notify the UI to re-render
+		foreach (var cell in _gameBoard.State.Cells)
+		{
+			EmitSignal(SignalName.GameBoardCellUpdate, cell.Index, cell.Pebbles);
+		}
+
+		// Player A is always first
+		CurrentPlayer = _gameBoard.Settings.PlayerA;
+
+		// Notify the game has started
+		EmitSignal(SignalName.GameStart);
+
+		// Inform others who the first player is
+		EmitSignal(SignalName.GameNextTurn, CurrentPlayer);
+	}
+
+	public void PlayMove(uint index)
 	{
 		// Trigger action
 		var action = _gameBoard.State.DoAction(index);
@@ -62,45 +80,21 @@ public partial class GameManager : Node
 			return;
 		}
 
-		// Let the player continue the turn if the last pebble falls on their mancala
-		if (action.LastChangedCell is not GameBoardMancala mancala || mancala.OwnerPlayer != _gameBoard.State.Cells[index].OwnerPlayer)
-		{
-			NextTurn();
-		}
+		// Let the next turn begin
+		NextTurn(togglePlayerTurn: action.NextPlayer != CurrentPlayer.Name);
 	}
 
-	public Player NextTurn()
+	public void NextTurn(bool togglePlayerTurn = false)
 	{
 		// Toggle the player turn
-		CurrentPlayer = ReferenceEquals(CurrentPlayer, _gameBoard.Settings.PlayerA)
-			? _gameBoard.Settings.PlayerB
-			: _gameBoard.Settings.PlayerA;
-
-		// Inform others that it's next player's turn
-		EmitSignal(SignalName.PlayerTurnChanged, CurrentPlayer);
-
-		// Deliver the turn's current player
-		return CurrentPlayer;
-	}
-
-	public void StartGame()
-	{
-		// Renew the game state
-		_gameBoard.State.Reset();
-
-		// Notify the UI to re-render
-		foreach (var cell in _gameBoard.State.Cells)
+		if (togglePlayerTurn)
 		{
-			EmitSignal(SignalName.GameBoardCellUpdate, cell.Index, cell.Pebbles);
+			CurrentPlayer = ReferenceEquals(CurrentPlayer, _gameBoard.Settings.PlayerA)
+				? _gameBoard.Settings.PlayerB
+				: _gameBoard.Settings.PlayerA;
 		}
 
-		// Player A is always first
-		CurrentPlayer = _gameBoard.Settings.PlayerA;
-
-		// Inform others who the first player is
-		EmitSignal(SignalName.PlayerTurnChanged, CurrentPlayer);
-
-		// Notify the game has started
-		EmitSignal(SignalName.GameStart);
+		// Inform others that it's next player's turn
+		EmitSignal(SignalName.GameNextTurn, CurrentPlayer);
 	}
 }

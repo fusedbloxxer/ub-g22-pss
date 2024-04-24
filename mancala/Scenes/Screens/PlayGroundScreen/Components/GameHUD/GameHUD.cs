@@ -53,7 +53,7 @@ public partial class GameHUD : Node
 		_gameBoard = GetNode<GameBoard>($"../{nameof(GameBoard)}");
 
 		// Listen to global signals
-		_gameManager.PlayerTurnChanged += OnGameManagerPlayerTurnChanged;
+		_gameManager.GameNextTurn += OnGameManagerGameNextTurn;
 		_gameManager.GameStart += OnGameManagerGameStart;
 		_gameManager.GameOver += OnGameManagerGameOver;
 
@@ -75,7 +75,7 @@ public partial class GameHUD : Node
 		_labelPlayerA.Text = "";
 	}
 
-	private void OnGameManagerPlayerTurnChanged(Player player)
+	private void OnGameManagerGameNextTurn(Player player)
 	{
 		var currentPlayerLabel = player.Name switch
 		{
@@ -102,6 +102,6 @@ public partial class GameHUD : Node
 
 	private void OnNextTurnButtonUp()
 	{
-		_gameManager.NextTurn();
+		_gameManager.NextTurn(togglePlayerTurn: true);
 	}
 }

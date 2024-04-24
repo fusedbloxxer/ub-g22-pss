@@ -2,31 +2,28 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-public partial class GameBoardState : Node
+public partial class GameBoardState : Node, ICloneable
 {
 	public GameBoardCell[] Cells { get; set; }
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public GameBoardState()
 	{
-		// Initialize the state
 		Reset();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _Ready()
 	{
-
+		Reset();
 	}
 
 	public GameBoardAction DoAction(uint index)
 	{
 		// Retrieve metadata
-		var changes = new List<GameBoardCell>();
-		var player = Cells[index].OwnerPlayer;
-		var pebbles = Cells[index].Pebbles;
-		var isGameOver = false;
+		List<GameBoardCell> changes = new List<GameBoardCell>();
+		PlayerName player = Cells[index].OwnerPlayer;
+		uint pebbles = Cells[index].Pebbles;
+		bool isGameOver = false;
+		PlayerName nextPlayer;
 
 		// Remove pebbles from the clicked entry
 		Cells[index].Pebbles = 0;
@@ -66,6 +63,16 @@ public partial class GameBoardState : Node
 
 		// Retrieve the last cell so it's known where it lands
 		var lastChangedCell = changes.Last();
+
+		// Let the player continue the turn if the last pebble falls on their mancala
+		if (lastChangedCell is GameBoardMancala && lastChangedCell.OwnerPlayer == player)
+		{
+			nextPlayer = player;
+		}
+		else
+		{
+			nextPlayer = player == PlayerName.A ? PlayerName.B : PlayerName.A;
+		}
 
 		// Check if either player side is empty and distribute the points
 		var playerCupsA = Cells
@@ -108,6 +115,7 @@ public partial class GameBoardState : Node
 			ChangedCells = changes.DistinctBy(x => x.Index),
 			LastChangedCell = lastChangedCell,
 			IsGameOver = isGameOver,
+			NextPlayer = nextPlayer,
 		};
 	}
 
@@ -133,5 +141,17 @@ public partial class GameBoardState : Node
 			new GameBoardCup(PlayerName.B, 12u, 0u) { Pebbles = 4 },
 			new GameBoardMancala(PlayerName.B, 13u),
 		};
+	}
+
+	public object Clone()
+	{
+		var state = new GameBoardState();
+
+		for (int i = 0; i != Cells.Length; i++)
+		{
+			state.Cells[i].Pebbles = Cells[i].Pebbles;
+		}
+
+		return state;
 	}
 }

@@ -1,3 +1,5 @@
+using System;
+
 public enum PlayerName
 {
     A = 0,
@@ -10,9 +12,14 @@ public enum PlayerType
     AI = 1,
 }
 
-public partial class Player : Godot.GodotObject
+public partial class Player : Godot.GodotObject, ICloneable
 {
     public PlayerName Name { get; init; }
 
     public PlayerType Type { get; set; }
+
+    public object Clone()
+    {
+        return new Player { Name = Name, Type = Type };
+    }
 }
