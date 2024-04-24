@@ -5,11 +5,11 @@ public partial class GameBoardCell
 {
 	public PlayerName OwnerPlayer { get; }
 
-	public uint Pebbles { get; set; }
+	public int Pebbles { get; set; }
 
-	public uint Index { get; }
+	public int Index { get; }
 
-	protected GameBoardCell(PlayerName ownerPlayer, uint index)
+	protected GameBoardCell(PlayerName ownerPlayer, int index)
 	{
 		OwnerPlayer = ownerPlayer;
 		Index = index;

@@ -16,19 +16,19 @@ public partial class GameBoardState : Node, ICloneable
 		Reset();
 	}
 
-	public GameBoardAction DoAction(uint index)
+	public GameBoardAction DoAction(int index)
 	{
 		// Retrieve metadata
 		List<GameBoardCell> changes = new List<GameBoardCell>();
 		PlayerName player = Cells[index].OwnerPlayer;
-		uint pebbles = Cells[index].Pebbles;
+		int pebbles = Cells[index].Pebbles;
 		bool isGameOver = false;
 		PlayerName nextPlayer;
 
 		// Remove pebbles from the clicked entry
 		Cells[index].Pebbles = 0;
 		changes.Add(Cells[index]);
-		index = (uint)((index + 1) % Cells.Length);
+		index = (int)((index + 1) % Cells.Length);
 
 		// Give them to the following cells
 		while (pebbles != 0)
@@ -39,7 +39,7 @@ public partial class GameBoardState : Node, ICloneable
 
 			--pebbles;
 
-			index = (uint)((index + 1) % Cells.Length);
+			index = (int)((index + 1) % Cells.Length);
 		}
 
 		// Check if last pebble fell alone into a cup which has an opposite with at least one pebble
@@ -53,11 +53,11 @@ public partial class GameBoardState : Node, ICloneable
 			changes.Add(mancala);
 
 			// Remove pebbles from current
-			Cells[cup.Index].Pebbles = 0u;
+			Cells[cup.Index].Pebbles = 0;
 			changes.Add(Cells[cup.Index]);
 
 			// Remove pebbles from opposite
-			Cells[cup.Opposite].Pebbles = 0u;
+			Cells[cup.Opposite].Pebbles = 0;
 			changes.Add(Cells[cup.Opposite]);
 		}
 
@@ -84,10 +84,10 @@ public partial class GameBoardState : Node, ICloneable
 		
 		var playerCupsPebblesA = playerCupsA
 			.Select(x => x.Pebbles)
-			.Aggregate(0u, (acc, x) => acc + x);
+			.Aggregate(0, (acc, x) => acc + x);
 		var playerCupsPebblesB = playerCupsB
 			.Select(x => x.Pebbles)
-			.Aggregate(0u, (acc, x) => acc + x);
+			.Aggregate(0, (acc, x) => acc + x);
 		
 		if (playerCupsPebblesA == 0u || playerCupsPebblesB == 0u)
 		{
@@ -124,22 +124,22 @@ public partial class GameBoardState : Node, ICloneable
 		Cells = new GameBoardCell[]
 		{
 			// First part of the board
-			new GameBoardCup(PlayerName.A, 0u, 12u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.A, 1u, 11u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.A, 2u, 10u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.A, 3u, 9u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.A, 4u, 8u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.A, 5u, 7u) { Pebbles = 4 },
-			new GameBoardMancala(PlayerName.A, 6u),
+			new GameBoardCup(PlayerName.A, 0, 12) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.A, 1, 11) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.A, 2, 10) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.A, 3, 9) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.A, 4, 8) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.A, 5, 7) { Pebbles = 4 },
+			new GameBoardMancala(PlayerName.A, 6),
 
 			// Second part of the board
-			new GameBoardCup(PlayerName.B, 7u, 5u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.B, 8u, 4u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.B, 9u, 3u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.B, 10u, 2u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.B, 11u, 1u) { Pebbles = 4 },
-			new GameBoardCup(PlayerName.B, 12u, 0u) { Pebbles = 4 },
-			new GameBoardMancala(PlayerName.B, 13u),
+			new GameBoardCup(PlayerName.B, 7, 5) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.B, 8, 4) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.B, 9, 3) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.B, 10, 2) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.B, 11, 1) { Pebbles = 4 },
+			new GameBoardCup(PlayerName.B, 12, 0) { Pebbles = 4 },
+			new GameBoardMancala(PlayerName.B, 13),
 		};
 	}
 

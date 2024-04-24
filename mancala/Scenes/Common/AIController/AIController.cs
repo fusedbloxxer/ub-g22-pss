@@ -7,7 +7,7 @@ public partial class AIController : Node
 	[Export]
 	public bool IsActive { get; set; } = true;
 	[Export]
-	public uint ThinkTime { get; set; } = 10u;
+	public int ThinkTime { get; set; } = 10;
 
 	public AISearchStrategy SearchStrategy { get; } = new AIMinimaxSearchStrategy();
 
@@ -60,7 +60,7 @@ public partial class AIController : Node
 		timerChain();
 	}
 
-	private Timer AddTimer(uint cupIndex, Action action)
+	private Timer AddTimer(int cupIndex, Action action)
 	{
 		GD.Print(cupIndex);
 

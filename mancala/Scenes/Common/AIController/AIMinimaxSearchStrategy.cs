@@ -5,7 +5,7 @@ using System.Linq;
 
 public partial class AIMinimaxSearchStrategy : AISearchStrategy
 {
-    public override IEnumerable<uint> Search(GameBoardState board, Player player)
+    public override IEnumerable<int> Search(GameBoardState board, Player player)
     {
         var state = new State(board, player.Name);
 
@@ -14,14 +14,14 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
         return move.Index;
     }
 
-    private (uint, GameAction) MaxValue(State state)
+    private (int, GameAction) MaxValue(State state)
     {
         if (state.IsTerminal())
         {
             return (state.Utility(), null);
         }
 
-        uint value = uint.MinValue;
+        int value = int.MinValue;
         GameAction move = null;
 
         foreach (var action in state.Actions())
@@ -37,14 +37,14 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
         return (value, move);
     }
 
-    private (uint, GameAction) MinValue(State state)
+    private (int, GameAction) MinValue(State state)
     {
         if (state.IsTerminal())
         {
             return (state.Utility(), null);
         }
 
-        uint value = uint.MaxValue;
+        int value = int.MaxValue;
         GameAction move = null;
 
         foreach (var action in state.Actions())
@@ -131,12 +131,12 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
             return state;
         }
 
-        public uint Utility(PlayerName player)
+        public int Utility(PlayerName player)
         {
             return BoardState.Cells.First(x => x is GameBoardMancala && x.OwnerPlayer == player).Pebbles;
         }
 
-        public uint Utility()
+        public int Utility()
         {
             return Utility(Player);
         }
@@ -153,7 +153,7 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
             return Player;
         }
 
-        public IEnumerable<uint> CupsToSelect()
+        public IEnumerable<int> CupsToSelect()
         {
             return BoardState.Cells
                 .Where(x => x is GameBoardCup && x.OwnerPlayer == Player && x.Pebbles != 0)
@@ -168,9 +168,9 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
 
     class GameAction
     {
-        public IEnumerable<uint> Index { get; set; }
+        public IEnumerable<int> Index { get; set; }
 
-        public GameAction(params uint[] indices)
+        public GameAction(params int[] indices)
         {
             Index = indices;
         }
@@ -180,25 +180,25 @@ public partial class AIMinimaxSearchStrategy : AISearchStrategy
     {
         public ActionNode<T> Parent;
 
-        public uint Index;
+        public int Index;
 
         public T Content;
 
-        public ActionNode(T content, uint index, ActionNode<T> parent = null)
+        public ActionNode(T content, int index, ActionNode<T> parent = null)
         {
             Content = content.Clone() as T;
             Parent = parent;
             Index = index;
         }
 
-        public ActionNode<T> Chain(T content, uint index)
+        public ActionNode<T> Chain(T content, int index)
         {
             return new ActionNode<T>(content, index, this);
         }
 
-        public IEnumerable<uint> Path()
+        public IEnumerable<int> Path()
         {
-            var stack = new Stack<uint>();
+            var stack = new Stack<int>();
 
             for (var node = this; node != null; node = node.Parent)
             {

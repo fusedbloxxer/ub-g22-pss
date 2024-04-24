@@ -7,12 +7,12 @@ public partial class Mancala : Node2D
 	public PlayerName PlayerOwner { get; set; }
 
 	[Export]
-	public uint Index { get; set; }
+	public int Index { get; set; }
 
 	private GameManager _gameState;
 	private Label _label;
 
-	private uint _pebbles;
+	private int _pebbles;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -28,7 +28,7 @@ public partial class Mancala : Node2D
 	{
 	}
 
-	private void OnGameStateGameBoardCellUpdate(uint index, uint pebbles)
+	private void OnGameStateGameBoardCellUpdate(int index, int pebbles)
 	{
 		if (Index != index)
 		{
@@ -38,7 +38,7 @@ public partial class Mancala : Node2D
 		Pebbles = pebbles;
 	}
 
-	public uint Pebbles
+	public int Pebbles
 	{
 		get => _pebbles;
 

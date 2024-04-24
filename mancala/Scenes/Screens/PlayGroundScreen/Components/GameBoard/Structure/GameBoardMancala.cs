@@ -5,7 +5,7 @@ using System.Linq;
 
 public partial class GameBoardMancala : GameBoardCell
 {
-    public GameBoardMancala(PlayerName playerOwner, uint index)
+    public GameBoardMancala(PlayerName playerOwner, int index)
     : base(playerOwner, index)
     {
 

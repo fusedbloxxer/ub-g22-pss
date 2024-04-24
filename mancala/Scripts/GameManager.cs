@@ -11,7 +11,7 @@ public partial class GameManager : Node
 	[Signal]
 	public delegate void GameNextTurnEventHandler(Player player);
 	[Signal]
-	public delegate void GameBoardCellUpdateEventHandler(uint index, uint pebbles);
+	public delegate void GameBoardCellUpdateEventHandler(int index, int pebbles);
 
 	public Player CurrentPlayer { get; set; }
 
@@ -62,7 +62,7 @@ public partial class GameManager : Node
 		EmitSignal(SignalName.GameNextTurn, CurrentPlayer);
 	}
 
-	public void PlayMove(uint index)
+	public void PlayMove(int index)
 	{
 		// Trigger action
 		var action = _gameBoard.State.DoAction(index);

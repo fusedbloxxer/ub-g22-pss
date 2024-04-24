@@ -6,7 +6,7 @@ public partial class Cup : Node2D
 	[Export]
 	public PlayerName OwnerPlayer { get; set; }
 	[Export]
-	public uint Index { get; set; }
+	public int Index { get; set; }
 
 	public bool Hover
 	{
@@ -26,7 +26,7 @@ public partial class Cup : Node2D
 		}
 	}
 
-	public uint Pebbles
+	public int Pebbles
 	{
 		get => _pebbles;
 
@@ -58,7 +58,7 @@ public partial class Cup : Node2D
 	private PlayerType _playerType;
 	private bool _isInside;
 	private bool _isActive;
-	private uint _pebbles;
+	private int _pebbles;
 	private bool _hover;
 
 	public override void _Ready()
@@ -121,7 +121,7 @@ public partial class Cup : Node2D
 			: settings.PlayerB.Type;
 	}
 
-	private void OnGameStateGameBoardCellUpdate(uint index, uint pebbles)
+	private void OnGameStateGameBoardCellUpdate(int index, int pebbles)
 	{
 		if (Index != index)
 		{

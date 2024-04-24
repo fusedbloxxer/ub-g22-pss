@@ -5,7 +5,7 @@ using System.Linq;
 
 public partial class AIRandomSearchStrategy : AISearchStrategy
 {
-    public override IEnumerable<uint> Search(GameBoardState state, Player player)
+    public override IEnumerable<int> Search(GameBoardState state, Player player)
     {
         var cups = state.Cells
             .Where(x => x is GameBoardCup && x.OwnerPlayer == player.Name)
@@ -17,6 +17,6 @@ public partial class AIRandomSearchStrategy : AISearchStrategy
 
         var cupIndex = cups.ElementAt(nonEmptyindex);
 
-        return new List<uint>() { cupIndex };
+        return new List<int>() { cupIndex };
     }
 }

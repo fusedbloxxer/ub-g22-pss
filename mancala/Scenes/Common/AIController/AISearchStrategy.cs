@@ -5,8 +5,8 @@ using System.Linq;
 
 public partial class AISearchStrategy : Node
 {
-    public virtual IEnumerable<uint> Search(GameBoardState board, Player player)
+    public virtual IEnumerable<int> Search(GameBoardState board, Player player)
     {
-        return Array.Empty<uint>();
+        return Array.Empty<int>();
     }
 }

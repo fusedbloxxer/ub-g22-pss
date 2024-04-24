@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 public partial class GameBoardCup : GameBoardCell
 {
-    public uint Opposite { get; }
+    public int Opposite { get; }
 
-    public GameBoardCup(PlayerName playerOwner, uint index, uint opposite)
+    public GameBoardCup(PlayerName playerOwner, int index, int opposite)
     : base(playerOwner, index)
     {
         Opposite = opposite;
