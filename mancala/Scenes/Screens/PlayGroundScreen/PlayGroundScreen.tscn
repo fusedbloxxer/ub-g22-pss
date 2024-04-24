@@ -19,4 +19,4 @@ metadata/_edit_lock_ = true
 
 [node name="AIController" parent="." instance=ExtResource("5_bis6q")]
 script = ExtResource("6_gnf5m")
-ThinkTime = 1
+ThinkTime = 5

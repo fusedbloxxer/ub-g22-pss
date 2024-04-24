@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public partial class AIController : Node
@@ -9,12 +10,16 @@ public partial class AIController : Node
 	[Export]
 	public int ThinkTime { get; set; } = 10;
 
-	public AISearchStrategy SearchStrategy { get; } = new AIMinimaxSearchStrategy();
+	public AISearchStrategy SearchStrategy { get; } = new AIMinimaxSearchStrategy(4);
 
 	private SceneManager _sceneManager;
 	private GameManager _gameManager;
 	private GameBoard _gameBoard;
 	private Timer _thinkTimer;
+
+	private Queue<Action> _actionQueue;
+	private int _remainingActions;
+	private double _timePassed;
 
 	public override void _Ready()
 	{
@@ -25,6 +30,24 @@ public partial class AIController : Node
 
 		// Listen to global signals
 		_gameManager.GameNextTurn += OnGameManagerGameNextTurn;
+		_actionQueue = new Queue<Action>();
+		_remainingActions = 0;
+	}
+
+	public override void _Process(double delta)
+	{
+		if (_actionQueue.Count == 0)
+		{
+			return;
+		}
+
+		_timePassed += delta;
+
+		if (TimeSpan.FromSeconds(_timePassed) > TimeSpan.FromSeconds(ThinkTime))
+		{
+			_timePassed = 0;
+			_actionQueue.Dequeue()();
+		}
 	}
 
 	private void OnGameManagerGameNextTurn(Player player)
@@ -39,31 +62,34 @@ public partial class AIController : Node
 			return;
 		}
 
-		var actions = SearchStrategy.Search(_gameBoard.State, player).ToArray();
-
-		Action timerChain = () => {};
-
-		for (int actionIndex = actions.Count() - 1; actionIndex >= 0; actionIndex--)
+		if (_remainingActions != 0)
 		{
-			var cupIndex = actionIndex;
-
-			if (actionIndex == actions.Count() - 1)
-			{
-				timerChain = () => AddTimer(actions[cupIndex], () => { });
-			}
-			else
-			{
-				timerChain = () => AddTimer(actions[cupIndex], timerChain);
-			}
+			return;
 		}
 
-		timerChain();
+		var actions = SearchStrategy.Search(_gameBoard.State, player).ToArray();
+		
+		_actionQueue = new Queue<Action>();
+
+		_remainingActions = actions.Length;
+
+		_timePassed = 0;
+
+		foreach (var action in actions)
+		{
+			var cupIndex = action;
+
+			_actionQueue.Enqueue(() => AddTimer(cupIndex));
+		}
+
+		if (_actionQueue.Count > 0)
+		{
+			_actionQueue.Dequeue()();
+		}
 	}
 
-	private Timer AddTimer(int cupIndex, Action action)
+	private void AddTimer(int cupIndex)
 	{
-		GD.Print(cupIndex);
-
 		var timer = new Timer
 		{
 			OneShot = true,
@@ -80,15 +106,13 @@ public partial class AIController : Node
 		{
 			cupUI.Hover = false;
 
+			--_remainingActions; // warning
+
 			_gameManager.PlayMove(cupIndex);
 
 			timer.QueueFree();
-
-			action();
 		};
 
 		AddChild(timer);
-
-		return timer;
 	}
 }

@@ -1,211 +1,245 @@
-﻿using Godot;
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public partial class AIMinimaxSearchStrategy : AISearchStrategy
 {
-    public override IEnumerable<int> Search(GameBoardState board, Player player)
-    {
-        var state = new State(board, player.Name);
+	private int cutoff;
 
-        var (_, move) = MaxValue(state);
+	public AIMinimaxSearchStrategy(int cutoff)
+	{
+		this.cutoff = cutoff;
+	}
 
-        return move.Index;
-    }
+	public override IEnumerable<int> Search(GameBoardState board, Player maxPlayer)
+	{
+		var state = new State(board, maxPlayer.Name);
 
-    private (int, GameAction) MaxValue(State state)
-    {
-        if (state.IsTerminal())
-        {
-            return (state.Utility(), null);
-        }
+		var (_, move) = MaxValue(state, maxPlayer, int.MinValue, int.MaxValue, 0);
 
-        int value = int.MinValue;
-        GameAction move = null;
+		return move?.Index ?? new List<int>();
+	}
 
-        foreach (var action in state.Actions())
-        {
-            var (childValue, childAction) = MinValue(state.Result(action));
-        
-            if (childValue > value)
-            {
-                (value, move) = (childValue, action);
-            }
-        }
+	private (int, GameAction) MaxValue(State state, Player maxPlayer, int alpha, int beta, int depth)
+	{
+		if (state.IsTerminal())
+		{
+			return (state.Utility(), null);
+		}
 
-        return (value, move);
-    }
+		if (depth > cutoff)
+		{
+			return (state.Eval(maxPlayer.Name), null);
+		}
 
-    private (int, GameAction) MinValue(State state)
-    {
-        if (state.IsTerminal())
-        {
-            return (state.Utility(), null);
-        }
+		int value = int.MinValue;
+		GameAction move = null;
 
-        int value = int.MaxValue;
-        GameAction move = null;
+		foreach (var action in state.Actions())
+		{
+			var (childValue, childAction) = MinValue(state.Result(action), maxPlayer, alpha, beta, depth + 1);
+		
+			if (childValue > value)
+			{
+				(value, move) = (childValue, action);
+				alpha = Math.Max(alpha, value);
+			}
 
-        foreach (var action in state.Actions())
-        {
-            var (childValue, childAction) = MaxValue(state.Result(action));
+			if (value >= beta)
+			{
+				return (value, move);
+			}
+		}
 
-            if (childValue < value)
-            {
-                (value, move) = (childValue, action);
-            }
+		return (value, move);
+	}
 
-        }
-    
-        return (value, move);
-    }
+	private (int, GameAction) MinValue(State state, Player maxPlayer, int alpha, int beta, int depth)
+	{
+		if (state.IsTerminal())
+		{
+			return (state.Utility(), null);
+		}
 
-    class State : ICloneable
-    {
-        public PlayerName Player { get; set; }
+		if (depth > cutoff)
+		{
+			return (state.Eval(maxPlayer.Name), null);
+		}
 
-        public GameBoardState BoardState { get; set; }
+		int value = int.MaxValue;
+		GameAction move = null;
 
-        public State(GameBoardState state, PlayerName player)
-        {
-            BoardState = state.Clone() as GameBoardState;
-            Player = player;
-        }
+		foreach (var action in state.Actions())
+		{
+			var (childValue, childAction) = MaxValue(state.Result(action), maxPlayer, alpha, beta, depth + 1);
 
-        public IEnumerable<GameAction> Actions()
-        {
-            // Queue used to flatten the multi-turns
-            var queue = new Queue<ActionNode<State>>();
+			if (childValue < value)
+			{
+				(value, move) = (childValue, action);
+				beta = Math.Min(beta, value);
+			}
 
-            // The list of actions an agent may take
-            var actions = new List<GameAction>();
+			if (value <= alpha)
+			{
+				return (value, move);
+			}
+		}
+	
+		return (value, move);
+	}
 
-            // Consider all moves at step 0
-            foreach (var cupIndex in CupsToSelect())
-            {
-                var action = new GameAction(cupIndex);
+	class State : ICloneable
+	{
+		public PlayerName Player { get; set; }
 
-                var state = Result(action);
+		public GameBoardState BoardState { get; set; }
 
-                queue.Enqueue(new ActionNode<State>(state, cupIndex));
-            }
+		public State(GameBoardState state, PlayerName player)
+		{
+			BoardState = state.Clone() as GameBoardState;
+			Player = player;
+		}
 
-            // Flatten action paths
-            while (queue.Count > 0)
-            {
-                var item = queue.Dequeue();
+		public IEnumerable<GameAction> Actions()
+		{
+			// Queue used to flatten the multi-turns
+			var queue = new Queue<ActionNode<State>>();
 
-                if (item.Content.Player != Player)
-                {
-                    actions.Add(new GameAction(item.Path().ToArray()));
-                }
+			// The list of actions an agent may take
+			var actions = new List<GameAction>();
 
-                foreach (var cupIndex in item.Content.CupsToSelect())
-                {
-                    var action = new GameAction(cupIndex);
+			// Consider all moves at step 0
+			foreach (var cupIndex in CupsToSelect())
+			{
+				var action = new GameAction(cupIndex);
 
-                    var state = item.Content.Result(action);
+				var state = Result(action);
 
-                    queue.Enqueue(new ActionNode<State>(state, cupIndex, item));
-                }
-            }
+				queue.Enqueue(new ActionNode<State>(state, cupIndex));
+			}
 
-            // Actions that represent one or more moves
-            return actions;
-        }
+			// Flatten action paths
+			while (queue.Count > 0)
+			{
+				var item = queue.Dequeue();
 
-        public State Result(GameAction action)
-        {
-            var state = Clone() as State;
+				if (item.Content.Player != Player)
+				{
+					actions.Add(new GameAction(item.Path().ToArray()));
+					continue;
+				}
 
-            GameBoardAction lastAction;
+				foreach (var cupIndex in item.Content.CupsToSelect())
+				{
+					var action = new GameAction(cupIndex);
 
-            foreach (var index in action.Index)
-            {
-                lastAction = state.BoardState.DoAction(index);
+					var state = item.Content.Result(action);
 
-                state.Player = lastAction.NextPlayer;
-            }
+					queue.Enqueue(new ActionNode<State>(state, cupIndex, item));
+				}
+			}
 
-            return state;
-        }
+			// Actions that represent one or more moves
+			return actions;
+		}
 
-        public int Utility(PlayerName player)
-        {
-            return BoardState.Cells.First(x => x is GameBoardMancala && x.OwnerPlayer == player).Pebbles;
-        }
+		public State Result(GameAction action)
+		{
+			var state = Clone() as State;
 
-        public int Utility()
-        {
-            return Utility(Player);
-        }
+			GameBoardAction lastAction;
 
-        public bool IsTerminal()
-        {
-            return BoardState.Cells
-                .Where(x => x is GameBoardCup cup && cup.Pebbles != 0)
-                .Count() == 0;
-        }
+			foreach (var index in action.Index)
+			{
+				lastAction = state.BoardState.DoAction(index);
 
-        public PlayerName ToMove()
-        {
-            return Player;
-        }
+				state.Player = lastAction.NextPlayer;
+			}
 
-        public IEnumerable<int> CupsToSelect()
-        {
-            return BoardState.Cells
-                .Where(x => x is GameBoardCup && x.OwnerPlayer == Player && x.Pebbles != 0)
-                .Select(x => x.Index);
-        }
+			return state;
+		}
 
-        public object Clone()
-        {
-            return new State(BoardState, Player);
-        }
-    }
+		public int Eval(PlayerName player)
+		{
+			return Utility(player);
+		}
 
-    class GameAction
-    {
-        public IEnumerable<int> Index { get; set; }
+		public int Utility(PlayerName player)
+		{
+			return BoardState.Cells.First(x => x is GameBoardMancala && x.OwnerPlayer == player).Pebbles;
+		}
 
-        public GameAction(params int[] indices)
-        {
-            Index = indices;
-        }
-    }
+		public int Utility()
+		{
+			return Utility(Player);
+		}
 
-    class ActionNode<T> where T : class, ICloneable
-    {
-        public ActionNode<T> Parent;
+		public bool IsTerminal()
+		{
+			return BoardState.Cells
+				.Where(x => x is GameBoardCup cup && cup.Pebbles != 0)
+				.Count() == 0;
+		}
 
-        public int Index;
+		public PlayerName ToMove()
+		{
+			return Player;
+		}
 
-        public T Content;
+		public IEnumerable<int> CupsToSelect()
+		{
+			return BoardState.Cells
+				.Where(x => x is GameBoardCup && x.OwnerPlayer == Player && x.Pebbles != 0)
+				.Select(x => x.Index);
+		}
 
-        public ActionNode(T content, int index, ActionNode<T> parent = null)
-        {
-            Content = content.Clone() as T;
-            Parent = parent;
-            Index = index;
-        }
+		public object Clone()
+		{
+			return new State(BoardState, Player);
+		}
+	}
 
-        public ActionNode<T> Chain(T content, int index)
-        {
-            return new ActionNode<T>(content, index, this);
-        }
+	class GameAction
+	{
+		public IEnumerable<int> Index { get; set; }
 
-        public IEnumerable<int> Path()
-        {
-            var stack = new Stack<int>();
+		public GameAction(params int[] indices)
+		{
+			Index = indices;
+		}
+	}
 
-            for (var node = this; node != null; node = node.Parent)
-            {
-                stack.Push(node.Index);
-            }
+	class ActionNode<T> where T : class, ICloneable
+	{
+		public ActionNode<T> Parent;
 
-            return stack.ToList();
-        }
-    }
+		public int Index;
+
+		public T Content;
+
+		public ActionNode(T content, int index, ActionNode<T> parent = null)
+		{
+			Content = content.Clone() as T;
+			Parent = parent;
+			Index = index;
+		}
+
+		public ActionNode<T> Chain(T content, int index)
+		{
+			return new ActionNode<T>(content, index, this);
+		}
+
+		public IEnumerable<int> Path()
+		{
+			var stack = new Stack<int>();
+
+			for (var node = this; node != null; node = node.Parent)
+			{
+				stack.Push(node.Index);
+			}
+
+			return stack.ToList();
+		}
+	}
 }

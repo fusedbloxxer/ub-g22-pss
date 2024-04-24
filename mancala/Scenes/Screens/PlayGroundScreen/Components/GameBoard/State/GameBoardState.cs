@@ -33,6 +33,12 @@ public partial class GameBoardState : Node, ICloneable
 		// Give them to the following cells
 		while (pebbles != 0)
 		{
+			// Skip the enemy's mancala when dropping stones
+			if (Cells[index] is GameBoardMancala && Cells[index].OwnerPlayer != player)
+			{
+				index = (int)((index + 1) % Cells.Length);
+			}
+
 			Cells[index].Pebbles += 1;
 
 			changes.Add(Cells[index]);
