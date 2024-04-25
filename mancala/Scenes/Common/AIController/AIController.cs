@@ -6,11 +6,15 @@ using System.Linq;
 public partial class AIController : Node
 {
 	[Export]
-	public bool IsActive { get; set; } = true;
+	public uint Cutoff { get; set; } = 4;
 	[Export]
 	public int ThinkTime { get; set; } = 10;
+	[Export]
+	public bool IsActive { get; set; } = true;
+	[Export]
+	public AISearchStrategy.Method Strategy { get; set; } = AISearchStrategy.Method.HeuristicAlphaBeta;
 
-	public AISearchStrategy SearchStrategy { get; } = new AIMinimaxSearchStrategy(4);
+	public AISearchStrategy SearchStrategy { get; set;  }
 
 	private SceneManager _sceneManager;
 	private GameManager _gameManager;
@@ -32,6 +36,14 @@ public partial class AIController : Node
 		_gameManager.GameNextTurn += OnGameManagerGameNextTurn;
 		_actionQueue = new Queue<Action>();
 		_remainingActions = 0;
+
+		// Use strategy
+		SearchStrategy = Strategy switch
+		{
+			AISearchStrategy.Method.Random => new AIRandomSearchStrategy(),
+			AISearchStrategy.Method.HeuristicAlphaBeta => new AIMinimaxSearchStrategy((int)Cutoff),
+			_ => throw new NotImplementedException("No AI search strategy exists for the given enum."),
+		};
 	}
 
 	public override void _Process(double delta)

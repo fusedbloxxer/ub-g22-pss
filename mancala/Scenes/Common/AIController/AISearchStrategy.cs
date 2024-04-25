@@ -9,4 +9,10 @@ public partial class AISearchStrategy : Node
     {
         return Array.Empty<int>();
     }
+
+    public enum Method
+    {
+        Random = 0,
+        HeuristicAlphaBeta = 1,
+    }
 }
